@@ -3,8 +3,8 @@ import { UniqueId, Player } from '../lib';
 import { ViewCard } from './ViewCard';
 
 export function ViewHand(props: {
-  update(): void,
-  player: Player,
+  update(): void;
+  player: Player;
 }) {
   const cards = props.player.getState().hand;
   const [selected, setSelected] = useState<UniqueId | undefined>();
@@ -15,7 +15,7 @@ export function ViewHand(props: {
           key={card.id}
           card={card}
           isSelected={selected === card.id}
-          onClick={() => setSelected(card.id)}
+          onSelect={() => setSelected(card.id)}
         />
       ))}
     </div>

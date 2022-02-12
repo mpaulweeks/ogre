@@ -35,6 +35,9 @@ export interface OgreCard extends HasId {
   readonly unit: Unit;
 }
 export interface OgreSquare extends HasKey, OgreCard { }
+export interface BoardSquare extends HasKey {
+  square?: OgreSquare;
+}
 
 export interface HasState<T> {
   getState(): T;

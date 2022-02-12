@@ -1,3 +1,4 @@
+import { BoardSquare, Grid, GridKey, OgreSquare } from ".";
 import { Player } from "./player";
 import { GameState, HasState, Team } from "./types";
 
@@ -14,6 +15,35 @@ export class Game implements HasState<GameState> {
     this.red = args.red;
     this.blue = args.blue;
     this.turn = args.turn;
+  }
+
+  getSquare(key: GridKey): OgreSquare | undefined {
+    return this.red.getSquare(key) ?? this.blue.getSquare(key) ?? undefined;
+  }
+  getVisibleSquares(): BoardSquare[][] {
+    const allPoints = [
+      this.red.getBase(),
+      this.blue.getBase(),
+      ...this.red.getState().board.map(os => os.key),
+      ...this.blue.getState().board.map(os => os.key),
+    ].map(key => Grid.parseKey(key));
+    const xMin = Math.min(...allPoints.map(p => p.x)) - 1;
+    const xMax = Math.max(...allPoints.map(p => p.x)) + 1;
+    const yMin = Math.min(...allPoints.map(p => p.y)) - 1;
+    const yMax = Math.max(...allPoints.map(p => p.y)) + 1;
+    const out: BoardSquare[][] = [];
+    for (let y = yMin; y <= yMax; y++) {
+      const row: BoardSquare[] = [];
+      out.push(row);
+      for (let x = xMin; x <= xMax; x++) {
+        const key = Grid.makeKey({ x, y });
+        row.push({
+          key,
+          square: this.getSquare(key),
+        });
+      }
+    }
+    return out;
   }
 
   getState() {

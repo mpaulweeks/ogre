@@ -25,6 +25,9 @@ export class Player implements HasState<PlayerState> {
       [Team.Blue]: '0,1',
     }[this.state.team];
   }
+  getSquare(key: GridKey): OgreSquare | undefined {
+    return this.state.board.filter(os => os.key === key)[0];
+  }
 
   drawForTurn(): void {
     const { hand, library } = this.state;

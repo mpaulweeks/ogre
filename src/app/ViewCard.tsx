@@ -1,35 +1,24 @@
 import React from 'react';
-import { OgreCard, Unit } from '../lib';
-import './ViewCard.css';
-
-const CardName: Record<Unit, string> = {
-  [Unit.Infantry]: 'Infantry',
-  [Unit.MissleTank]: 'MissleTank',
-  [Unit.Gev]: 'Gev',
-  [Unit.HeavyTank]: 'HeavyTank',
-  [Unit.Howitzer]: 'Howitzer',
-  [Unit.LightGev]: 'LightGev',
-  [Unit.CruiseMissiles]: 'CruiseMissiles',
-  [Unit.Ogre]: 'Ogre',
-  [Unit.OgreDamaged]: 'OgreDamaged',
-};
+import { OgreCard } from '../lib';
+import { getName } from './render';
+import './styles.css';
 
 export function ViewCard(props: {
-  onClick(): void;
+  onSelect(): void;
   isSelected: boolean;
   card: OgreCard;
 }) {
-  const style = props.isSelected ? {
-    borderColor: 'green',
-  } : {};
+  const style = {
+    borderColor: props.isSelected ? 'green' : 'black',
+  };
   return (
     <div
       className='ViewCard'
       style={style}
-      onClick={props.onClick}
+      onClick={props.onSelect}
     >
       <div>
-        {CardName[props.card.unit]}
+        {getName(props.card.unit)}
       </div>
     </div>
   );
