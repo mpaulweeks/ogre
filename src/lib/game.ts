@@ -2,8 +2,8 @@ import { Player } from "./player";
 import { GameState, HasState, Team } from "./types";
 
 export class Game implements HasState<GameState> {
-  private readonly red: Player;
-  private readonly blue: Player;
+  readonly red: Player;
+  readonly blue: Player;
   private turn: number;
 
   private constructor(args: {
