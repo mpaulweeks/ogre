@@ -7,9 +7,10 @@ export function ViewSquare(props: {
   isHover: boolean;
   gridKey: GridKey;
   square?: OgreSquare;
+  onHover(): void;
 }) {
   const style = {
-    borderColor: props.isHover ? 'hover' : 'grey',
+    borderColor: props.isHover ? 'black' : 'grey',
   };
   const label = (
     (props.gridKey === NeutralSpace && 'GAME') ||
@@ -20,6 +21,7 @@ export function ViewSquare(props: {
     <div
       className='ViewCard'
       style={style}
+      onMouseEnter={props.onHover}
     >
       <div>{label}</div>
     </div>

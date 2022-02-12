@@ -7,18 +7,19 @@ export function ViewBoard(props: {
   update(): void;
   game: Game;
 }) {
-  const [hover, setHover] = useState<GridKey | undefined>();
+  const [hoverKey, setHoverKey] = useState<GridKey | undefined>();
   const gridSquares = props.game.getVisibleSquares();
   return (
-    <div>
-      {gridSquares.map(row => (
-        <div className="ViewBoardRow">
+    <div onMouseLeave={() => setHoverKey(undefined)}>
+      {gridSquares.map((row, ri) => (
+        <div className="ViewBoardRow" key={ri}>
           {row.map(gs => (
             <ViewSquare
               key={gs.key}
-              isHover={false}
+              isHover={gs.key === hoverKey}
               gridKey={gs.key}
               square={gs.square}
+              onHover={() => setHoverKey(gs.key)}
             />
           ))}
         </div>
