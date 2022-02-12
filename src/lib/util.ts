@@ -14,7 +14,7 @@ export function assertExists<T extends HasId>(elm: T, arr: T[]): number {
 }
 export function assertRemove<T extends HasId>(elm: T, arr: T[]): void {
   const index = assertExists(elm, arr);
-  arr.splice(index);
+  arr.splice(index, 1);
 }
 
 export function range(length: number): number[] {

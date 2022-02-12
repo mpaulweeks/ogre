@@ -3,19 +3,19 @@ import { UniqueId, Player } from '../lib';
 import { ViewCard } from './ViewCard';
 
 export function ViewHand(props: {
-  update(): void;
   player: Player;
+  selected?: UniqueId;
+  setSelected(id: UniqueId | undefined): void;
 }) {
   const cards = props.player.getState().hand;
-  const [selected, setSelected] = useState<UniqueId | undefined>();
   return (
     <div style={{ display: 'flex', }}>
       {cards.map(card => (
         <ViewCard
           key={card.id}
           card={card}
-          isSelected={selected === card.id}
-          onSelect={() => setSelected(card.id)}
+          isSelected={props.selected === card.id}
+          onSelect={() => props.setSelected(card.id)}
         />
       ))}
     </div>

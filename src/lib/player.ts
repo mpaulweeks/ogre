@@ -1,3 +1,4 @@
+import { UniqueId } from ".";
 import { GridKey, HasState, OgreCard, OgreSquare, PlayerState, Team, Unit } from "./types";
 import { assertRemove, flatten, nextId, range, shuffle } from "./util";
 
@@ -25,8 +26,11 @@ export class Player implements HasState<PlayerState> {
       [Team.Blue]: '0,1',
     }[this.state.team];
   }
-  getSquare(key: GridKey): OgreSquare | undefined {
+  getSquareFromBoard(key: GridKey): OgreSquare | undefined {
     return this.state.board.filter(os => os.key === key)[0];
+  }
+  getCardFromHand(id: UniqueId): OgreCard | undefined {
+    return this.state.hand.filter(oc => oc.id === id)[0];
   }
 
   drawForTurn(): void {

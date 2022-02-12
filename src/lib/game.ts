@@ -1,4 +1,4 @@
-import { BoardSquare, Grid, GridKey, OgreSquare } from ".";
+import { BoardSquare, Grid, GridKey, OgreCard, OgreSquare, UniqueId } from ".";
 import { Player } from "./player";
 import { GameState, HasState, Team } from "./types";
 
@@ -17,8 +17,17 @@ export class Game implements HasState<GameState> {
     this.turn = args.turn;
   }
 
+  playCard(card: OgreCard, dest: GridKey): void {
+    ({
+      [Team.Red]: this.red,
+      [Team.Blue]: this.blue,
+    })[card.team].playCard(card, dest);
+  }
+  getCard(id: UniqueId): OgreCard | undefined {
+    return this.red.getCardFromHand(id) ?? this.blue.getCardFromHand(id) ?? undefined;
+  }
   getSquare(key: GridKey): OgreSquare | undefined {
-    return this.red.getSquare(key) ?? this.blue.getSquare(key) ?? undefined;
+    return this.red.getSquareFromBoard(key) ?? this.blue.getSquareFromBoard(key) ?? undefined;
   }
   getVisibleSquares(): BoardSquare[][] {
     const allPoints = [

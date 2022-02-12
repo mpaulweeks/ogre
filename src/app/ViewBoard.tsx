@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
-import { Game, GridKey, Player } from '../lib';
+import React from 'react';
+import { Game, GridKey } from '../lib';
 import { ViewSquare } from './ViewSquare';
 import './styles.css';
 
 export function ViewBoard(props: {
-  update(): void;
   game: Game;
+  selected?: GridKey;
+  setSelected(key: GridKey | undefined): void;
+  playCard(): void;
 }) {
-  const [hoverKey, setHoverKey] = useState<GridKey | undefined>();
   const gridSquares = props.game.getVisibleSquares();
   return (
-    <div onMouseLeave={() => setHoverKey(undefined)}>
+    <div onMouseLeave={() => props.setSelected(undefined)}>
       {gridSquares.map((row, ri) => (
         <div className="ViewBoardRow" key={ri}>
           {row.map(gs => (
             <ViewSquare
               key={gs.key}
-              isHover={gs.key === hoverKey}
+              isHover={gs.key === props.selected}
               gridKey={gs.key}
               square={gs.square}
-              onHover={() => setHoverKey(gs.key)}
+              onHover={() => props.setSelected(gs.key)}
+              onClick={props.playCard}
             />
           ))}
         </div>
