@@ -26,6 +26,11 @@ export function GameApp() {
         selected={selectedHand}
         setSelected={setSelectedHand}
       />
+      <ViewHand
+        player={game.blue}
+        selected={selectedHand}
+        setSelected={setSelectedHand}
+      />
       <hr />
       <ViewBoard
         game={game}

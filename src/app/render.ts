@@ -1,4 +1,4 @@
-import { Unit } from "../lib";
+import { Team, Unit } from "../lib";
 
 const CardName: Record<Unit, string> = {
   [Unit.Infantry]: 'Infantry',
@@ -13,4 +13,12 @@ const CardName: Record<Unit, string> = {
 };
 export function getName(unit: Unit) {
   return CardName[unit];
+}
+const TeamColor: Record<Team, string> = {
+  [Team.Red]: 'salmon',
+  [Team.Blue]: 'lightblue',
+}
+export function getBackgroundColor(team?: Team) {
+  if (team === undefined) { return 'lightgrey'; }
+  return TeamColor[team];
 }

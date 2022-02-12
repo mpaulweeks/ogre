@@ -1,6 +1,6 @@
 import React from 'react';
 import { GridKey, NeutralSpace, OgreSquare } from '../lib';
-import { getName } from './render';
+import { getBackgroundColor, getName } from './render';
 import './styles.css';
 
 export function ViewSquare(props: {
@@ -11,6 +11,7 @@ export function ViewSquare(props: {
   onClick(): void;
 }) {
   const style = {
+    backgroundColor: getBackgroundColor(props.square?.team),
     borderColor: props.isHover ? 'black' : 'grey',
   };
   const label = (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { OgreCard } from '../lib';
-import { getName } from './render';
+import { getBackgroundColor, getName } from './render';
 import './styles.css';
 
 export function ViewCard(props: {
@@ -9,6 +9,7 @@ export function ViewCard(props: {
   card: OgreCard;
 }) {
   const style = {
+    backgroundColor: getBackgroundColor(props.card.team),
     borderColor: props.isSelected ? 'green' : 'black',
   };
   return (
