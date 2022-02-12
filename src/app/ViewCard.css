@@ -1,0 +1,15 @@
+.ViewCard {
+  cursor: pointer;
+  height: 5em;
+  width: 8em;
+
+  color: black;
+  background: white;
+  border: 0.6em solid black;
+  border-radius: 1em;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
