@@ -1,7 +1,20 @@
 
-export type GridKey = string;
+export type UniqueId = number;
+export interface HasId {
+  id: UniqueId;
+}
 
-export type Team = 'Red' | 'Blue';
+export type GridKey = string;
+export interface GridPoint {
+  x: number;
+  y: number;
+}
+export const NeutralSpace: GridKey = '0,0';
+
+export enum Team {
+  Red,
+  Blue,
+};
 export enum Unit {
   Infantry,
   MissleTank,
@@ -11,25 +24,32 @@ export enum Unit {
   LightGev,
   CruiseMissiles,
   Ogre,
+  OgreDamaged,
 }
 
 export interface HasKey {
   key: GridKey;
 }
-export interface OgreCard {
-  team: Team;
-  unit: Unit;
+export interface OgreCard extends HasId {
+  readonly team: Team;
+  readonly unit: Unit;
 }
-export interface OgreSquare extends HasKey {
-  card: OgreCard;
-}
+export interface OgreSquare extends HasKey, OgreCard { }
 
 export interface HasState<T> {
   getState(): T;
   loadState(state: T): void;
 }
 export interface PlayerState {
-  hand: OgreCard[];
-  library: OgreCard[];
-  board: OgreSquare[];
+  readonly team: Team;
+  readonly hand: OgreCard[];
+  readonly library: OgreCard[];
+  readonly board: OgreSquare[];
+  readonly discard: OgreCard[];
+}
+
+export interface GameState {
+  readonly red: PlayerState;
+  readonly blue: PlayerState;
+  readonly turn: number;
 }

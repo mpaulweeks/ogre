@@ -1,3 +1,21 @@
+import { HasId } from "./types";
+
+let uniqueCounter = 0;
+export function nextId() { return uniqueCounter++; }
+
+export function assertExists<T extends HasId>(elm: T, arr: T[]): number {
+  const matches = arr
+    .map((v, i) => ({ index: i, value: v, }))
+    .filter(item => elm.id === item.value.id);
+  if (matches.length !== 1) {
+    throw new Error('id not found in collection');
+  }
+  return matches[0].index;
+}
+export function assertRemove<T extends HasId>(elm: T, arr: T[]): void {
+  const index = assertExists(elm, arr);
+  arr.splice(index);
+}
 
 export function range(length: number): number[] {
   const out = [] as number[];
@@ -5,6 +23,13 @@ export function range(length: number): number[] {
     out.push(i);
   }
   return out;
+}
+
+export function filterEmpty<T>(arr: (T | undefined)[]): T[] {
+  function notEmpty<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
+  }
+  return arr.filter(notEmpty);
 }
 
 export function flatten<T>(arr: T[][]): T[] {
