@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Board, filterEmpty, flatten, Game, GridKey, OgreCard, OgreSquare, Unit } from '../lib';
 import { ViewSquare } from './ViewSquare';
-import './styles.css';
 
 export function ViewBoard(props: {
   game: Game;
@@ -101,8 +100,13 @@ export function ViewBoard(props: {
   }
 
   return (
-    <div onMouseLeave={() => setHover(undefined)}>
-      <h1>{message}</h1>
+    <div
+      className='ViewBoard'
+      onMouseLeave={() => setHover(undefined)}
+    >
+      <div className='ViewBoardTitle'>
+        {message}
+      </div>
       {gridSquares.map((row, ri) => (
         <div className="ViewBoardRow" key={ri}>
           {row.map(gs => (

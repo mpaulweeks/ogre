@@ -1,7 +1,6 @@
 import React from 'react';
 import { BlueBase, GridKey, NeutralSpace, OgreSquare, RedBase } from '../lib';
 import { getBackgroundColor, getName } from './render';
-import './styles.css';
 
 export function ViewSquare(props: {
   isHover: boolean;

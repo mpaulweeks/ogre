@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Game, GameState, GridKey, OgreCard, OgreSquare } from '../lib';
 import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
+import './styles.css';
 
 export function GameApp() {
   const [state, setState] = useState<GameState>(Game.create().getState());
@@ -26,22 +27,21 @@ export function GameApp() {
   };
 
   return (
-    <div>
+    <div className='ViewColumns'>
       <ViewHand
         player={game.red}
         selected={selectedHand}
         setSelected={setSelectedHand}
       />
-      <ViewHand
-        player={game.blue}
-        selected={selectedHand}
-        setSelected={setSelectedHand}
-      />
-      <hr />
       <ViewBoard
         game={game}
         toPlay={selectedHand}
         playCard={playCard}
+      />
+      <ViewHand
+        player={game.blue}
+        selected={selectedHand}
+        setSelected={setSelectedHand}
       />
     </div>
   );

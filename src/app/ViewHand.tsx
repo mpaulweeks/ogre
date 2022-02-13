@@ -9,7 +9,7 @@ export function ViewHand(props: {
 }) {
   const cards = props.player.getState().hand;
   return (
-    <div style={{ display: 'flex', }}>
+    <div className='ViewHand'>
       {cards.map(card => (
         <ViewCard
           key={card.id}
