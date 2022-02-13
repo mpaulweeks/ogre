@@ -36,16 +36,17 @@ export function ViewBoard(props: {
       ? enemyPlayer.getState().board.map(os => os.key)
       : (activePlayer?.getSpotting() ?? [])
   );
-  const lightGevSpaces = isLightGev
-    ? filterEmpty(
-      flatten(gridSquares).map(bs => bs.square ? undefined : bs.key)
-    ).filter(key => !IllegalLightGevKeys.has(key))
+  const lightGevSupply = isLightGev
+    ? board.getNeutralLightGevSquares(gridSquares)
     : [];
-  const supplied = new Set(lightGevSpaces.concat(
-    (isMissle && []) ||
-    activePlayer?.getSupplied() ||
-    []
-  ));
+  const supplied = new Set([
+    ...(
+      (isMissle && []) ||
+      activePlayer?.getSupplied() ||
+      []
+    ),
+    ...lightGevSupply,
+  ]);
   const possibleAttacks: Set<GridKey> = new Set(
     isMissle
       ? enemyPlayer?.getState().board.map(os => os.key) ?? []

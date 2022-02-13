@@ -1,13 +1,15 @@
-import { mapReduce } from ".";
 import { Game } from "./game";
 import { Grid } from "./grid";
-import { BoardSquare, GridPoint, OgreSquare } from "./types";
+import { BoardSquare, GridPoint, IllegalLightGevKeys, OgreSquare } from './types';
+import { filterEmpty, flatten, mapReduce } from "./util";
 
 export class Board {
   constructor(private readonly game: Game) { }
 
-  getNeutralLightGevSquares() {
-    // todo
+  getNeutralLightGevSquares(grid: BoardSquare[][]) {
+    return filterEmpty(
+      flatten(grid).map(bs => bs.square ? undefined : bs.key)
+    ).filter(key => !IllegalLightGevKeys.has(key))
   }
   getVisibleSquares(tempSquare?: OgreSquare): BoardSquare[][] {
     const { game } = this;
