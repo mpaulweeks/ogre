@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Board, filterEmpty, flatten, Game, GridKey, OgreCard, OgreSquare, Unit } from '../lib';
 import { ViewSquare } from './ViewSquare';
 import './styles.css';
@@ -8,9 +8,12 @@ export function ViewBoard(props: {
   toPlay?: OgreCard;
   playCard(args: { deploy: GridKey, attack?: OgreSquare }): void;
 }) {
-  // todo on toPlay change, set local state to undefined
   const [hover, setHover] = useState<GridKey | undefined>();
   const [deploy, setDeploy] = useState<GridKey | undefined>();
+  useEffect(() => {
+    setHover(undefined);
+    setDeploy(undefined);
+  }, [props.toPlay]);
 
   const team = props.toPlay?.team;
   const activePlayer = team && props.game.getPlayer(team);
@@ -23,6 +26,11 @@ export function ViewBoard(props: {
   } : undefined;
   const gridSquares = board.getVisibleSquares(tempSquare);
 
+  const enemySquares = new Set(
+    team
+      ? props.game.getEnemy(team).getState().board.map(os => os.key)
+      : []
+  );
   const spotting = new Set(
     (team && isMissle)
       ? props.game.getEnemy(team).getState().board.map(os => os.key)
@@ -33,7 +41,7 @@ export function ViewBoard(props: {
       ? []
       : (activePlayer?.getSupplied() ?? [])
   );
-  const attacking: Set<GridKey> = new Set(
+  const possibleAttacks: Set<GridKey> = new Set(
     isMissle
       ? filterEmpty(flatten(gridSquares).map(bs => bs.square?.key))
       : (
@@ -44,6 +52,7 @@ export function ViewBoard(props: {
         )
       )
   );
+  const allValidAttacks = new Set(Array.from(possibleAttacks).filter(key => enemySquares.has(key)));
 
   const message = (
     (!props.toPlay && 'Click a card in hand') ||
@@ -62,7 +71,7 @@ export function ViewBoard(props: {
     }
     // handle missle
     if (isMissle) {
-      const validAttack = attacking.has(hover) && props.game.getEnemy(team).getSquareFromBoard(hover);
+      const validAttack = allValidAttacks.has(hover) && props.game.getEnemy(team).getSquareFromBoard(hover);
       if (validAttack) {
         props.playCard({ deploy: hover, attack: validAttack, });
       }
@@ -72,7 +81,7 @@ export function ViewBoard(props: {
     if (!deploy) {
       const validDeploy = supplied.has(hover);
       if (validDeploy) {
-        if (attacking.size > 0) {
+        if (allValidAttacks.size > 0) {
           setDeploy(hover);
         } else {
           props.playCard({ deploy: hover, attack: undefined, });
@@ -81,7 +90,7 @@ export function ViewBoard(props: {
       return;
     }
     // handle 2nd click
-    const validAttack = attacking.has(hover) && props.game.getEnemy(team).getSquareFromBoard(hover);
+    const validAttack = allValidAttacks.has(hover) && props.game.getEnemy(team).getSquareFromBoard(hover);
     if (validAttack) {
       return props.playCard({ deploy: deploy, attack: validAttack, });
     }
@@ -100,7 +109,7 @@ export function ViewBoard(props: {
               isHover={gs.key === hover}
               isSpotted={spotting.has(gs.key)}
               isSupplied={supplied.has(gs.key)}
-              isAttacking={attacking.has(gs.key)}
+              isAttacking={possibleAttacks.has(gs.key)}
               gridKey={gs.key}
               square={gs.square}
               onHover={() => setHover(gs.key)}

@@ -1,3 +1,4 @@
+import { mapReduce } from ".";
 import { Grid } from "./grid";
 import { BlueBase, GridKey, HasState, OgreCard, OgreSquare, PlayerState, RedBase, Team, UniqueId, Unit } from "./types";
 import { assertRemove, flatten, nextId, range, shuffle, unique } from "./util";
@@ -39,7 +40,10 @@ export class Player implements HasState<PlayerState> {
       key: dest,
     };
     const spotted = new Set(this.getSpotting());
-    return Grid.getSpottedAttacks(tempSquare, spotted);
+    const possibleAttacks = Grid.getSpottedAttacks(tempSquare, spotted);
+    const friendlySpaces = mapReduce(this.getState().board, os => os.key);
+    const noFriendlyFire = possibleAttacks.filter(key => !friendlySpaces[key]);
+    return noFriendlyFire;
   }
   getSpotting(): GridKey[] {
     return unique(flatten(this.state.board.map(os => Grid.getSpotting(os))));
