@@ -4,7 +4,9 @@ import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
 import './gameStyles.css';
 
-export function ViewGame() {
+export function ViewGame(props: {
+  lobby?: any; // todo
+}) {
   const [state, setState] = useState<GameState>(Game.create().getState());
   const [selectedHand, setSelectedHand] = useState<OgreCard | undefined>();
 
