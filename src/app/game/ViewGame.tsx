@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Game, GameState, GridKey, OgreCard, OgreSquare } from '../lib';
+import { Game, GameState, GridKey, OgreCard, OgreSquare } from '../../lib';
 import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
-import './styles.css';
+import './gameStyles.css';
 
-export function GameApp() {
+export function ViewGame() {
   const [state, setState] = useState<GameState>(Game.create().getState());
   const [selectedHand, setSelectedHand] = useState<OgreCard | undefined>();
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Player, OgreCard } from '../lib';
+import { Player, OgreCard } from '../../lib';
 import { ViewCard } from './ViewCard';
 
 export function ViewHand(props: {

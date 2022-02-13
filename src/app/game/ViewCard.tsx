@@ -1,6 +1,6 @@
 import React from 'react';
-import { OgreCard } from '../lib';
-import { getBackgroundColor, getName } from './render';
+import { OgreCard } from '../../lib';
+import { getBackgroundColor, getName } from '../render';
 
 export function ViewCard(props: {
   onClick(): void;

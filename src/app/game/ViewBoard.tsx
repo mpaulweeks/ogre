@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Board, filterEmpty, flatten, Game, GridKey, OgreCard, OgreSquare, Unit } from '../lib';
+import { Board, filterEmpty, flatten, Game, GridKey, OgreCard, OgreSquare, Unit } from '../../lib';
 import { ViewSquare } from './ViewSquare';
 
 export function ViewBoard(props: {
