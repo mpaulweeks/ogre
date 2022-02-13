@@ -15,8 +15,8 @@ export function ViewBoard(props: {
     setDeploy(undefined);
   }, [props.toPlay]);
 
-  const team = props.toPlay?.team;
-  const activePlayer = team && props.game.getPlayer(team);
+  const activePlayer = props.toPlay && props.game.getPlayer(props.toPlay.team);
+  const enemyPlayer = props.toPlay && props.game.getEnemy(props.toPlay.team);
   const isMissle = props.toPlay?.unit === Unit.CruiseMissiles;
 
   const board = new Board(props.game);
@@ -27,13 +27,13 @@ export function ViewBoard(props: {
   const gridSquares = board.getVisibleSquares(tempSquare);
 
   const enemySquares = new Set(
-    team
-      ? props.game.getEnemy(team).getState().board.map(os => os.key)
+    enemyPlayer
+      ? enemyPlayer.getState().board.map(os => os.key)
       : []
   );
   const spotting = new Set(
-    (team && isMissle)
-      ? props.game.getEnemy(team).getState().board.map(os => os.key)
+    (enemyPlayer && isMissle)
+      ? enemyPlayer.getState().board.map(os => os.key)
       : (activePlayer?.getSpotting() ?? [])
   );
   const supplied = new Set(
@@ -43,7 +43,7 @@ export function ViewBoard(props: {
   );
   const possibleAttacks: Set<GridKey> = new Set(
     isMissle
-      ? filterEmpty(flatten(gridSquares).map(bs => bs.square?.key))
+      ? enemyPlayer?.getState().board.map(os => os.key) ?? []
       : (
         (props.toPlay && activePlayer) && (
           (deploy && activePlayer.getAttacking(props.toPlay, deploy)) ||
@@ -63,7 +63,7 @@ export function ViewBoard(props: {
 
   const onClick = () => {
     // handle bad states
-    if (!props.toPlay || !team) {
+    if (!props.toPlay || !enemyPlayer) {
       return;
     }
     if (!hover) {
@@ -71,7 +71,7 @@ export function ViewBoard(props: {
     }
     // handle missle
     if (isMissle) {
-      const validAttack = allValidAttacks.has(hover) && props.game.getEnemy(team).getSquareFromBoard(hover);
+      const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
       if (validAttack) {
         props.playCard({ deploy: hover, attack: validAttack, });
       }
@@ -90,7 +90,7 @@ export function ViewBoard(props: {
       return;
     }
     // handle 2nd click
-    const validAttack = allValidAttacks.has(hover) && props.game.getEnemy(team).getSquareFromBoard(hover);
+    const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
     if (validAttack) {
       return props.playCard({ deploy: deploy, attack: validAttack, });
     }
