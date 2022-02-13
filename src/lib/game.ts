@@ -1,6 +1,6 @@
-import { BoardSquare, Grid, GridKey, OgreCard, OgreSquare, UniqueId } from ".";
+import { Grid } from "./grid";
 import { Player } from "./player";
-import { GameState, HasState, Team } from "./types";
+import { BoardSquare, GameState, GridKey, HasState, OgreCard, OgreSquare, Team, UniqueId } from "./types";
 
 export class Game implements HasState<GameState> {
   readonly red: Player;
@@ -17,11 +17,14 @@ export class Game implements HasState<GameState> {
     this.turn = args.turn;
   }
 
-  playCard(card: OgreCard, dest: GridKey): void {
-    ({
+  getPlayer(team: Team): Player {
+    return ({
       [Team.Red]: this.red,
       [Team.Blue]: this.blue,
-    })[card.team].playCard(card, dest);
+    })[team]
+  }
+  playCard(card: OgreCard, dest: GridKey): void {
+    this.getPlayer(card.team).playCard(card, dest);
   }
   getCard(id: UniqueId): OgreCard | undefined {
     return this.red.getCardFromHand(id) ?? this.blue.getCardFromHand(id) ?? undefined;

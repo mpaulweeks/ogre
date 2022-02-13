@@ -40,6 +40,16 @@ export function flatten<T>(arr: T[][]): T[] {
   return out;
 }
 
+export function unique<T>(arr: T[]): T[] {
+  const out = [] as T[];
+  arr.forEach(elm => {
+    if (!out.includes(elm)) {
+      out.push(elm);
+    }
+  });
+  return out;
+}
+
 export function shuffle<T>(arr: T[]): T[] {
   // https://stackoverflow.com/a/12646864
   const shuffled = arr.concat();

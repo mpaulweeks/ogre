@@ -9,11 +9,9 @@ export function GameApp() {
   const [selectedBoard, setSelectedBoard] = useState<GridKey | undefined>();
 
   const game = Game.loadFromState(state);
-  const player = game.red;
+  const card = selectedHand ? game.getCard(selectedHand) : undefined;
   const playCard = () => {
-    if (!selectedHand) { return; }
     if (!selectedBoard) { return; }
-    const card = game.getCard(selectedHand);
     if (!card) { return; }
     game.playCard(card, selectedBoard);
     setState(game.getState());
@@ -36,6 +34,7 @@ export function GameApp() {
         game={game}
         selected={selectedBoard}
         setSelected={setSelectedBoard}
+        toPlay={card}
         playCard={playCard}
       />
     </div>

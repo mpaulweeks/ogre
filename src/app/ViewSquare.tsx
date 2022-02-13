@@ -5,6 +5,7 @@ import './styles.css';
 
 export function ViewSquare(props: {
   isHover: boolean;
+  isSpotted: boolean;
   gridKey: GridKey;
   square?: OgreSquare;
   onHover(): void;
@@ -12,7 +13,11 @@ export function ViewSquare(props: {
 }) {
   const style = {
     backgroundColor: getBackgroundColor(props.square?.team),
-    borderColor: props.isHover ? 'black' : 'grey',
+    borderColor: (
+      (props.isHover && 'black') ||
+      (props.isSpotted && 'yellow') ||
+      'grey'
+    ),
   };
   const label = (
     (props.gridKey === NeutralSpace && 'GAME') ||

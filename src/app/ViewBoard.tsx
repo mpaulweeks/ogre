@@ -1,5 +1,5 @@
 import React from 'react';
-import { Game, GridKey } from '../lib';
+import { flatten, Game, Grid, GridKey, OgreCard } from '../lib';
 import { ViewSquare } from './ViewSquare';
 import './styles.css';
 
@@ -7,9 +7,12 @@ export function ViewBoard(props: {
   game: Game;
   selected?: GridKey;
   setSelected(key: GridKey | undefined): void;
+  toPlay?: OgreCard;
   playCard(): void;
 }) {
   const gridSquares = props.game.getVisibleSquares();
+  const activePlayer = props.toPlay ? props.game.getPlayer(props.toPlay.team) : undefined;
+  const spotting = activePlayer?.getSpotting() ?? [];
   return (
     <div onMouseLeave={() => props.setSelected(undefined)}>
       {gridSquares.map((row, ri) => (
@@ -18,6 +21,7 @@ export function ViewBoard(props: {
             <ViewSquare
               key={gs.key}
               isHover={gs.key === props.selected}
+              isSpotted={spotting.includes(gs.key)}
               gridKey={gs.key}
               square={gs.square}
               onHover={() => props.setSelected(gs.key)}

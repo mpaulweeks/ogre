@@ -4,7 +4,7 @@ import { getBackgroundColor, getName } from './render';
 import './styles.css';
 
 export function ViewCard(props: {
-  onSelect(): void;
+  onClick(): void;
   isSelected: boolean;
   card: OgreCard;
 }) {
@@ -16,7 +16,7 @@ export function ViewCard(props: {
     <div
       className='ViewCard'
       style={style}
-      onClick={props.onSelect}
+      onClick={props.onClick}
     >
       <div>
         {getName(props.card.unit)}

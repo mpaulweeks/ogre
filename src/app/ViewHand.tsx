@@ -15,7 +15,7 @@ export function ViewHand(props: {
           key={card.id}
           card={card}
           isSelected={props.selected === card.id}
-          onSelect={() => props.setSelected(card.id)}
+          onClick={() => props.selected === card.id ? props.setSelected(undefined) : props.setSelected(card.id)}
         />
       ))}
     </div>

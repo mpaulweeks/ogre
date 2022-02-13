@@ -9,7 +9,16 @@ export interface GridPoint {
   x: number;
   y: number;
 }
+export interface OrientedOffest {
+  dx: number;
+  dy: number;
+}
+export interface RawOffset {
+  rx: number;
+  ry: number;
+}
 export const NeutralSpace: GridKey = '0,0';
+export const BaseOffset: RawOffset = { rx: 0, ry: -1 };
 
 export enum Team {
   Red,
