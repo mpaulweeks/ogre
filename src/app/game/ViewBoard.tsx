@@ -9,11 +9,11 @@ export function ViewBoard(props: {
 }) {
   const [hover, setHover] = useState<GridKey | undefined>();
   const [deploy, setDeploy] = useState<GridKey | undefined>();
-  const [ogreAttack, setOgreAttack] = useState<OgreSquare | undefined>();
+  const [ogreAttack1, setOgreAttack1] = useState<OgreSquare | undefined>();
   useEffect(() => {
     setHover(undefined);
     setDeploy(undefined);
-    setOgreAttack(undefined);
+    setOgreAttack1(undefined);
   }, [props.toPlay]);
 
   const activePlayer = props.toPlay && props.game.getPlayer(props.toPlay.team);
@@ -64,11 +64,11 @@ export function ViewBoard(props: {
   const allValidAttacks = new Set(
     Array.from(possibleAttacks)
       .filter(key => enemySquares.has(key))
-      .filter(key => !ogreAttack || ogreAttack.unit === Unit.Ogre || key !== ogreAttack?.key)
+      .filter(key => !ogreAttack1 || ogreAttack1.unit === Unit.Ogre || key !== ogreAttack1?.key)
   );
 
   const message = (
-    (ogreAttack && 'Click second target to attack with your Ogre') ||
+    (ogreAttack1 && 'Click second target to attack with your Ogre') ||
     (isOgre && 'Click first target to attack with your Ogre') ||
     (!props.toPlay && 'Click a card in hand') ||
     (isMissle && 'Click square to attack with your missle') ||
@@ -108,11 +108,11 @@ export function ViewBoard(props: {
     const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
     if (validAttack) {
       if (isOgre) {
-        if (ogreAttack) {
-          props.playCard({ deploy: deploy, attacks: [ogreAttack, validAttack], });
+        if (ogreAttack1) {
+          props.playCard({ deploy: deploy, attacks: [ogreAttack1, validAttack], });
         } else {
           setHover(undefined);
-          setOgreAttack(validAttack);
+          setOgreAttack1(validAttack);
         }
       } else {
         props.playCard({ deploy: deploy, attacks: [validAttack], });
@@ -135,7 +135,7 @@ export function ViewBoard(props: {
           {row.map(gs => (
             <ViewSquare
               key={gs.key}
-              isHover={gs.key === hover || gs.key === ogreAttack?.key}
+              isHover={gs.key === hover || gs.key === ogreAttack1?.key}
               isSpotted={spotting.has(gs.key)}
               isSupplied={supplied.has(gs.key)}
               isAttacking={possibleAttacks.has(gs.key)}
