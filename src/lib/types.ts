@@ -66,3 +66,9 @@ export interface GameState {
   readonly blue: PlayerState;
   readonly turn: number;
 }
+
+export interface GameAction {
+  readonly card: OgreCard;
+  readonly dest: GridKey;
+  readonly attack?: GridKey;
+}
