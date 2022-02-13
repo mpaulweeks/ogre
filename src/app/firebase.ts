@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import firebase from 'firebase/app';
-import firedatabase from 'firebase/database';
+import { Database, getDatabase, onValue, ref, set } from 'firebase/database';
+import { GameState } from '../lib';
+import { GameStateCallback, GameStateDisconnect, LobbyId } from './appTypes';
 
 dotenv.config();
 const config = {
@@ -15,12 +17,25 @@ const config = {
 };
 
 class FirebaseSingleton {
-  private db: firedatabase.Database;
+  private db: Database;
   isOnline = true;
 
   constructor() {
     firebase.initializeApp(config);
-    this.db = firedatabase.getDatabase();
+    this.db = getDatabase();
+  }
+
+  private stateRef(lobbyId: LobbyId) {
+    return ref(this.db, `lobby/${lobbyId}/state`);
+  }
+
+  async setState(lobbyId: LobbyId, state: GameState) {
+    await set(this.stateRef(lobbyId), state);
+  }
+  listenForState(lobbyId: LobbyId, cb: GameStateCallback): GameStateDisconnect {
+    return onValue(this.stateRef(lobbyId), snapshot => {
+      cb(snapshot.val());
+    });
   }
 }
 
