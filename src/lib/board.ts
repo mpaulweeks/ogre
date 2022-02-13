@@ -6,6 +6,9 @@ import { BoardSquare, GridPoint, OgreSquare } from "./types";
 export class Board {
   constructor(private readonly game: Game) { }
 
+  getNeutralLightGevSquares() {
+    // todo
+  }
   getVisibleSquares(tempSquare?: OgreSquare): BoardSquare[][] {
     const { game } = this;
     const squares = [
