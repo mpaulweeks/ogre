@@ -12,7 +12,8 @@ export function ViewBoard(props: {
 }) {
   const gridSquares = props.game.getVisibleSquares();
   const activePlayer = props.toPlay ? props.game.getPlayer(props.toPlay.team) : undefined;
-  const spotting = activePlayer?.getSpotting() ?? [];
+  const spotting = new Set(activePlayer?.getSpotting() ?? []);
+  const supplied = new Set(activePlayer?.getSupplied() ?? []);
   return (
     <div onMouseLeave={() => props.setSelected(undefined)}>
       {gridSquares.map((row, ri) => (
@@ -21,7 +22,8 @@ export function ViewBoard(props: {
             <ViewSquare
               key={gs.key}
               isHover={gs.key === props.selected}
-              isSpotted={spotting.includes(gs.key)}
+              isSpotted={spotting.has(gs.key)}
+              isSupplied={supplied.has(gs.key)}
               gridKey={gs.key}
               square={gs.square}
               onHover={() => props.setSelected(gs.key)}

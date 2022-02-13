@@ -6,23 +6,24 @@ import './styles.css';
 export function ViewSquare(props: {
   isHover: boolean;
   isSpotted: boolean;
+  isSupplied: boolean;
   gridKey: GridKey;
   square?: OgreSquare;
   onHover(): void;
   onClick(): void;
 }) {
-  const style = {
-    backgroundColor: getBackgroundColor(props.square?.team),
+  const backgroundColor = props.gridKey === NeutralSpace ? 'black' : getBackgroundColor(props.square?.team);
+  const style: React.CSSProperties = {
+    backgroundColor,
     borderColor: (
       (props.isHover && 'black') ||
-      (props.isSpotted && 'yellow') ||
-      'grey'
+      (props.isSupplied && 'green') ||
+      backgroundColor
     ),
   };
   const label = (
-    (props.gridKey === NeutralSpace && 'GAME') ||
     (props.square && getName(props.square.unit)) ||
-    '??'
+    ''
   );
   return (
     <div
@@ -32,6 +33,7 @@ export function ViewSquare(props: {
       onClick={props.onClick}
     >
       <div>{label}</div>
+      {props.isSpotted && !props.square && <div className='ViewCardTarget'>X</div>}
     </div>
   );
 }

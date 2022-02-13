@@ -8,7 +8,7 @@ export function ViewCard(props: {
   isSelected: boolean;
   card: OgreCard;
 }) {
-  const style = {
+  const style: React.CSSProperties = {
     backgroundColor: getBackgroundColor(props.card.team),
     borderColor: props.isSelected ? 'green' : 'black',
   };

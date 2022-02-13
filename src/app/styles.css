@@ -7,11 +7,21 @@
   background: white;
   border: 0.6em solid black;
   border-radius: 1em;
+  margin: 0.2em;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.ViewCardTarget {
+  position: absolute;
+  left: 0.5em;
+  top: 0.5em;
+  color: purple;
+  font-weight: bold;
 }
 
 .ViewBoardRow {

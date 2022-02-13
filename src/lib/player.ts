@@ -33,6 +33,24 @@ export class Player implements HasState<PlayerState> {
   getSpotting(): GridKey[] {
     return unique(flatten(this.state.board.map(os => Grid.getSpotting(os))));
   }
+  getSupplied(): GridKey[] {
+    const visited: Set<GridKey> = new Set();
+    const toExplore: GridKey[] = [this.getBase()];
+    const toSupply: GridKey[] = [];
+    while (toExplore.length) {
+      const next = toExplore.pop()!;
+      visited.add(next);
+      const square = this.getSquareFromBoard(next);
+      if (square) {
+        const canSupply = Grid.getSupply(square);
+        const newSupply = canSupply.filter(key => !visited.has(key));
+        toExplore.push(...newSupply);
+      } else {
+        toSupply.push(next);
+      }
+    }
+    return toSupply;
+  }
 
   drawForTurn(): void {
     const { hand, library } = this.state;

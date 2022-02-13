@@ -19,6 +19,6 @@ const TeamColor: Record<Team, string> = {
   [Team.Blue]: 'lightblue',
 }
 export function getBackgroundColor(team?: Team) {
-  if (team === undefined) { return 'lightgrey'; }
+  if (team === undefined) { return '#eee'; }
   return TeamColor[team];
 }

@@ -1,3 +1,4 @@
+import { NeutralSpace } from ".";
 import { GridKey, GridPoint, OgreSquare, OrientedOffest, RawOffset, Team, Unit } from "./types";
 
 const UpDownLeftRight: RawOffset[] = [
@@ -59,17 +60,23 @@ const SpottingRange: Record<Unit, RawOffset[]> = {
 
 export class Grid {
 
+  static getSupply(square: OgreSquare): GridKey[] {
+    const raw = SupplyRange[square.unit];
+    const oriented = raw.map(ro => this.orientOffset(square.team, ro));
+    const applied = oriented.map(oo => this.applyOffset(square.key, oo));
+    return applied.filter(key => key !== NeutralSpace);
+  }
   static getAttacks(square: OgreSquare): GridKey[] {
     const raw = AttackRange[square.unit];
     const oriented = raw.map(ro => this.orientOffset(square.team, ro));
     const applied = oriented.map(oo => this.applyOffset(square.key, oo));
-    return applied;
+    return applied.filter(key => key !== NeutralSpace);
   }
   static getSpotting(square: OgreSquare): GridKey[] {
     const raw = SpottingRange[square.unit];
     const oriented = raw.map(ro => this.orientOffset(square.team, ro));
     const applied = oriented.map(oo => this.applyOffset(square.key, oo));
-    return applied;
+    return applied.filter(key => key !== NeutralSpace);
   }
 
   static applyOffset(key: GridKey, offset: OrientedOffest): GridKey {
