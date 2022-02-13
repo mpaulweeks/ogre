@@ -13,16 +13,15 @@ export function ViewGame(props: {
   const game = Game.loadFromState(state);
   const playCard = (args: {
     deploy: GridKey;
-    attack?: OgreSquare;
+    attacks: OgreSquare[];
   }) => {
     if (!selectedHand) {
       throw new Error('board cannot play card when selected is undefined');
     }
-    // todo handle attack
     game.playCard({
       card: selectedHand,
       deploy: args.deploy,
-      attack: args.attack,
+      attacks: args.attacks,
     });
     setSelectedHand(undefined);
     setState(game.getState());

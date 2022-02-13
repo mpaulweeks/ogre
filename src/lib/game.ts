@@ -31,12 +31,12 @@ export class Game implements HasState<GameState> {
   playCard(args: {
     card: OgreCard;
     deploy: GridKey;
-    attack?: OgreSquare;
+    attacks: OgreSquare[];
   }): void {
     this.getPlayer(args.card.team).playCard(args.card, args.deploy);
-    if (args.attack) {
-      this.getEnemy(args.card.team).receiveAttack(args.attack);
-    }
+    args.attacks.forEach(os => {
+      this.getEnemy(args.card.team).receiveAttack(os);
+    });
   }
   getCard(id: UniqueId): OgreCard | undefined {
     return this.red.getCardFromHand(id) ?? this.blue.getCardFromHand(id) ?? undefined;
@@ -70,5 +70,4 @@ export class Game implements HasState<GameState> {
       blue: Player.create(Team.Blue),
     })
   }
-
 }

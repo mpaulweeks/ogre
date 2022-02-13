@@ -5,13 +5,15 @@ import { ViewSquare } from './ViewSquare';
 export function ViewBoard(props: {
   game: Game;
   toPlay?: OgreCard;
-  playCard(args: { deploy: GridKey, attack?: OgreSquare }): void;
+  playCard(args: { deploy: GridKey, attacks: OgreSquare[] }): void;
 }) {
   const [hover, setHover] = useState<GridKey | undefined>();
   const [deploy, setDeploy] = useState<GridKey | undefined>();
+  const [ogreAttack, setOgreAttack] = useState<OgreSquare | undefined>();
   useEffect(() => {
     setHover(undefined);
     setDeploy(undefined);
+    setOgreAttack(undefined);
   }, [props.toPlay]);
 
   const activePlayer = props.toPlay && props.game.getPlayer(props.toPlay.team);
@@ -58,7 +60,11 @@ export function ViewBoard(props: {
         )
       )
   );
-  const allValidAttacks = new Set(Array.from(possibleAttacks).filter(key => enemySquares.has(key)));
+  const allValidAttacks = new Set(
+    Array.from(possibleAttacks)
+      .filter(key => enemySquares.has(key))
+      .filter(key => !ogreAttack || ogreAttack.unit === Unit.Ogre || key !== ogreAttack?.key)
+  );
 
   const message = (
     (!props.toPlay && 'Click a card in hand') ||
@@ -79,7 +85,7 @@ export function ViewBoard(props: {
     if (isMissle) {
       const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
       if (validAttack) {
-        props.playCard({ deploy: hover, attack: validAttack, });
+        props.playCard({ deploy: hover, attacks: [validAttack], });
       }
       return;
     }
@@ -90,7 +96,7 @@ export function ViewBoard(props: {
         if (allValidAttacks.size > 0) {
           setDeploy(hover);
         } else {
-          props.playCard({ deploy: hover, attack: undefined, });
+          props.playCard({ deploy: hover, attacks: [], });
         }
       }
       return;
@@ -98,10 +104,19 @@ export function ViewBoard(props: {
     // handle 2nd click
     const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
     if (validAttack) {
-      return props.playCard({ deploy: deploy, attack: validAttack, });
+      if (props.toPlay.unit === Unit.Ogre) {
+        if (ogreAttack) {
+          props.playCard({ deploy: deploy, attacks: [ogreAttack, validAttack], });
+        } else {
+          setHover(undefined);
+          setOgreAttack(validAttack);
+        }
+      } else {
+        props.playCard({ deploy: deploy, attacks: [validAttack], });
+      }
+      return;
     }
-    // do nothing
-    return;
+    // else do nothing
   }
 
   return (
