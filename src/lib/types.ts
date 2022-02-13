@@ -18,7 +18,8 @@ export interface RawOffset {
   ry: number;
 }
 export const NeutralSpace: GridKey = '0,0';
-export const BaseOffset: RawOffset = { rx: 0, ry: -1 };
+export const RedBase: GridKey = '0,-1';
+export const BlueBase: GridKey = '0,1';
 
 export enum Team {
   Red,

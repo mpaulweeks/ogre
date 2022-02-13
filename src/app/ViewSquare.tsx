@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseOffset, Grid, GridKey, NeutralSpace, OgreSquare, Team } from '../lib';
+import { BlueBase, GridKey, NeutralSpace, OgreSquare, RedBase } from '../lib';
 import { getBackgroundColor, getName } from './render';
 import './styles.css';
 
@@ -7,14 +7,15 @@ export function ViewSquare(props: {
   isHover: boolean;
   isSpotted: boolean;
   isSupplied: boolean;
+  isAttacking: boolean;
   gridKey: GridKey;
   square?: OgreSquare;
   onHover(): void;
   onClick(): void;
 }) {
   const isNeutral = !props.square && props.gridKey === NeutralSpace;
-  const isRedBase = !props.square && props.gridKey === Grid.applyOffset(NeutralSpace, Grid.orientOffset(Team.Red, BaseOffset));
-  const isBlueBase = !props.square && props.gridKey === Grid.applyOffset(NeutralSpace, Grid.orientOffset(Team.Blue, BaseOffset));
+  const isRedBase = !props.square && props.gridKey === RedBase;
+  const isBlueBase = !props.square && props.gridKey === BlueBase;
   const backgroundColor = (
     (isNeutral && 'black') ||
     (isRedBase && 'red') ||
@@ -31,7 +32,8 @@ export function ViewSquare(props: {
     ),
     borderColor: (
       (props.isHover && 'black') ||
-      (props.isSupplied && 'green') ||
+      (props.isAttacking && 'red') ||
+      (props.isSupplied && 'lightgreen') ||
       backgroundColor
     ),
   };
@@ -50,7 +52,7 @@ export function ViewSquare(props: {
       onClick={props.onClick}
     >
       <div>{label}</div>
-      {props.isSpotted && !props.square && <div className='ViewCardTarget'>X</div>}
+      {props.isSpotted && <div className='ViewCardTarget'>X</div>}
     </div>
   );
 }

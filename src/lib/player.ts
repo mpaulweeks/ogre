@@ -1,5 +1,5 @@
 import { Grid } from "./grid";
-import { BaseOffset, GridKey, HasState, NeutralSpace, OgreCard, OgreSquare, PlayerState, Team, UniqueId, Unit } from "./types";
+import { BlueBase, GridKey, HasState, OgreCard, OgreSquare, PlayerState, RedBase, Team, UniqueId, Unit } from "./types";
 import { assertRemove, flatten, nextId, range, shuffle, unique } from "./util";
 
 const DeckContents = [
@@ -21,7 +21,10 @@ export class Player implements HasState<PlayerState> {
   loadState(state: PlayerState) { this.state = state; }
 
   getBase(): GridKey {
-    return Grid.applyOffset(NeutralSpace, Grid.orientOffset(this.state.team, BaseOffset));
+    return ({
+      [Team.Red]: RedBase,
+      [Team.Blue]: BlueBase,
+    })[this.state.team];
   }
   getSquareFromBoard(key: GridKey): OgreSquare | undefined {
     return this.state.board.filter(os => os.key === key)[0];
@@ -30,6 +33,14 @@ export class Player implements HasState<PlayerState> {
     return this.state.hand.filter(oc => oc.id === id)[0];
   }
 
+  getAttacking(card: OgreCard, dest: GridKey): GridKey[] {
+    const tempSquare = {
+      ...card,
+      key: dest,
+    };
+    const spotted = new Set(this.getSpotting());
+    return Grid.getSpottedAttacks(tempSquare, spotted);
+  }
   getSpotting(): GridKey[] {
     return unique(flatten(this.state.board.map(os => Grid.getSpotting(os))));
   }
