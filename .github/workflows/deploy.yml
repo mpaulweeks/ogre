@@ -20,8 +20,11 @@ jobs:
 
     - name: Setup .env
       run: |
-        ${{ secrets.DOTENV }} > .env
+        echo "$DOTENV" > .env
         cat .env
+      shell: bash
+      env:
+        DOTENV: ${{secrets.DOTENV}}
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
