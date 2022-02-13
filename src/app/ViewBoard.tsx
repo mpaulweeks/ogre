@@ -1,5 +1,5 @@
 import React from 'react';
-import { flatten, Game, Grid, GridKey, OgreCard } from '../lib';
+import { Game, GridKey, OgreCard } from '../lib';
 import { ViewSquare } from './ViewSquare';
 import './styles.css';
 

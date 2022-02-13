@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { UniqueId, Player } from '../lib';
 import { ViewCard } from './ViewCard';
 
