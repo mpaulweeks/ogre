@@ -17,6 +17,7 @@ export function ViewSquare(props: {
   const isRedBase = !props.square && props.gridKey === RedBase;
   const isBlueBase = !props.square && props.gridKey === BlueBase;
   const backgroundColor = (
+    (props.isSupplied && 'lightgreen') ||
     (isNeutral && 'black') ||
     (isRedBase && 'red') ||
     (isBlueBase && 'blue') ||
@@ -25,6 +26,7 @@ export function ViewSquare(props: {
   const style: React.CSSProperties = {
     backgroundColor,
     color: (
+      (props.isSupplied && 'black') ||
       (isNeutral && 'white') ||
       (isRedBase && 'white') ||
       (isBlueBase && 'white') ||
@@ -33,7 +35,7 @@ export function ViewSquare(props: {
     borderColor: (
       (props.isHover && 'black') ||
       (props.isAttacking && 'red') ||
-      (props.isSupplied && 'lightgreen') ||
+      (props.isSpotted && 'yellow') ||
       backgroundColor
     ),
   };
@@ -52,7 +54,6 @@ export function ViewSquare(props: {
       onClick={props.onClick}
     >
       <div>{label}</div>
-      {props.isSpotted && <div className='ViewCardTarget'>X</div>}
     </div>
   );
 }
