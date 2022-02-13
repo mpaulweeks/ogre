@@ -20,6 +20,11 @@ export interface RawOffset {
 export const NeutralSpace: GridKey = '0,0';
 export const RedBase: GridKey = '0,-1';
 export const BlueBase: GridKey = '0,1';
+export const IllegalLightGevKeys = new Set([
+  NeutralSpace,
+  RedBase,
+  BlueBase,
+]);
 
 export enum Team {
   Red = 'Red',

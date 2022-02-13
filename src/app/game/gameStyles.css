@@ -35,9 +35,12 @@
 
 .ViewCard {
   cursor: pointer;
-  height: 5em;
-  width: 8em;
+  height: 6em;
+  width: 10em;
+  padding: 0 1em;
+  box-sizing: border-box;
 
+  text-align: center;
   color: black;
   background: white;
   border: 0.6em solid black;
@@ -49,6 +52,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.ViewCardLibrary {
+  cursor: text;
+  color: white;
 }
 
 .ViewCardTarget {

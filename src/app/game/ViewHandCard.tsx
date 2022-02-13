@@ -2,14 +2,15 @@ import React from 'react';
 import { OgreCard } from '../../lib';
 import { getBackgroundColor, getName } from '../render';
 
-export function ViewCard(props: {
+export function ViewHandCard(props: {
   onClick(): void;
   isSelected: boolean;
   card: OgreCard;
 }) {
+  const backgroundColor = getBackgroundColor(props.card.team);
   const style: React.CSSProperties = {
-    backgroundColor: getBackgroundColor(props.card.team),
-    borderColor: props.isSelected ? 'green' : 'black',
+    backgroundColor,
+    borderColor: props.isSelected ? 'black' : backgroundColor,
   };
   return (
     <div

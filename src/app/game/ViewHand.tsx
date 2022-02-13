@@ -1,17 +1,24 @@
 import React from 'react';
-import { Player, OgreCard } from '../../lib';
-import { ViewCard } from './ViewCard';
+import { Player, OgreCard, Team } from '../../lib';
+import { ViewHandCard } from './ViewHandCard';
 
 export function ViewHand(props: {
   player: Player;
   selected?: OgreCard;
   setSelected(card: OgreCard | undefined): void;
 }) {
-  const cards = props.player.getState().hand;
+  const { team, hand, library } = props.player.getState();
+  const libraryColor = ({
+    [Team.Red]: 'red',
+    [Team.Blue]: 'blue',
+  })[team];
   return (
     <div className='ViewHand'>
-      {cards.map(card => (
-        <ViewCard
+      <div className='ViewCard ViewCardLibrary' style={{ backgroundColor: libraryColor, borderColor: libraryColor, }}>
+        {library.length} cards remaining
+      </div>
+      {hand.map(card => (
+        <ViewHandCard
           key={card.id}
           card={card}
           isSelected={props.selected?.id === card.id}

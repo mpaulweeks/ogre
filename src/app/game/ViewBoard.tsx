@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Board, filterEmpty, flatten, Game, GridKey, OgreCard, OgreSquare, Unit } from '../../lib';
+import { Board, filterEmpty, flatten, Game, GridKey, IllegalLightGevKeys, NeutralSpace, OgreCard, OgreSquare, Unit } from '../../lib';
 import { ViewSquare } from './ViewSquare';
 
 export function ViewBoard(props: {
@@ -36,12 +36,16 @@ export function ViewBoard(props: {
       ? enemyPlayer.getState().board.map(os => os.key)
       : (activePlayer?.getSpotting() ?? [])
   );
-  const supplied = new Set(
-    (isLightGev && filterEmpty(flatten(gridSquares).map(bs => bs.square ? undefined : bs.key))) ||
+  const lightGevSpaces = isLightGev
+    ? filterEmpty(
+      flatten(gridSquares).map(bs => bs.square ? undefined : bs.key)
+    ).filter(key => !IllegalLightGevKeys.has(key))
+    : [];
+  const supplied = new Set(lightGevSpaces.concat(
     (isMissle && []) ||
     activePlayer?.getSupplied() ||
     []
-  );
+  ));
   const possibleAttacks: Set<GridKey> = new Set(
     isMissle
       ? enemyPlayer?.getState().board.map(os => os.key) ?? []
