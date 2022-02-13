@@ -20,8 +20,9 @@ jobs:
 
     - name: Setup .env
       run: |
-        echo "$DOTENV" > .env
-        cat .env
+        'echo "$DOTENV"'
+        'echo "$DOTENV" > .env'
+        'cat .env'
       shell: bash
       env:
         DOTENV: ${{secrets.DOTENV}}
