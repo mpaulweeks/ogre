@@ -18,6 +18,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Setup .env
+      run: |
+        ${{ secrets.DOTENV }} > .env
+        cat .env
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
