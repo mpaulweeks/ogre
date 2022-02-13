@@ -20,6 +20,7 @@ export function ViewBoard(props: {
   const enemyPlayer = props.toPlay && props.game.getEnemy(props.toPlay.team);
   const isLightGev = props.toPlay?.unit === Unit.LightGev;
   const isMissle = props.toPlay?.unit === Unit.CruiseMissiles;
+  const isOgre = props.toPlay?.unit === Unit.Ogre;
 
   const board = new Board(props.game);
   const tempSquare: OgreSquare | undefined = (props.toPlay && deploy) ? {
@@ -67,6 +68,8 @@ export function ViewBoard(props: {
   );
 
   const message = (
+    (ogreAttack && 'Click second target to attack with your Ogre') ||
+    (isOgre && 'Click first target to attack with your Ogre') ||
     (!props.toPlay && 'Click a card in hand') ||
     (isMissle && 'Click square to attack with your missle') ||
     (!deploy && 'Click square to deploy') ||
@@ -104,7 +107,7 @@ export function ViewBoard(props: {
     // handle 2nd click
     const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
     if (validAttack) {
-      if (props.toPlay.unit === Unit.Ogre) {
+      if (isOgre) {
         if (ogreAttack) {
           props.playCard({ deploy: deploy, attacks: [ogreAttack, validAttack], });
         } else {
@@ -132,7 +135,7 @@ export function ViewBoard(props: {
           {row.map(gs => (
             <ViewSquare
               key={gs.key}
-              isHover={gs.key === hover}
+              isHover={gs.key === hover || gs.key === ogreAttack?.key}
               isSpotted={spotting.has(gs.key)}
               isSupplied={supplied.has(gs.key)}
               isAttacking={possibleAttacks.has(gs.key)}
