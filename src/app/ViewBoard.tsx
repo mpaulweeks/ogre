@@ -17,6 +17,7 @@ export function ViewBoard(props: {
 
   const activePlayer = props.toPlay && props.game.getPlayer(props.toPlay.team);
   const enemyPlayer = props.toPlay && props.game.getEnemy(props.toPlay.team);
+  const isLightGev = props.toPlay?.unit === Unit.LightGev;
   const isMissle = props.toPlay?.unit === Unit.CruiseMissiles;
 
   const board = new Board(props.game);
@@ -37,9 +38,10 @@ export function ViewBoard(props: {
       : (activePlayer?.getSpotting() ?? [])
   );
   const supplied = new Set(
-    isMissle
-      ? []
-      : (activePlayer?.getSupplied() ?? [])
+    (isLightGev && filterEmpty(flatten(gridSquares).map(bs => bs.square ? undefined : bs.key))) ||
+    (isMissle && []) ||
+    activePlayer?.getSupplied() ||
+    []
   );
   const possibleAttacks: Set<GridKey> = new Set(
     isMissle
