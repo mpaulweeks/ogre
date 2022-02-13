@@ -22,19 +22,19 @@ export const RedBase: GridKey = '0,-1';
 export const BlueBase: GridKey = '0,1';
 
 export enum Team {
-  Red,
-  Blue,
+  Red = 'Red',
+  Blue = 'Blue',
 };
 export enum Unit {
-  Infantry,
-  MissleTank,
-  Gev,
-  HeavyTank,
-  Howitzer,
-  LightGev,
-  CruiseMissiles,
-  Ogre,
-  OgreDamaged,
+  Infantry = 'Infantry',
+  MissleTank = 'MissleTank',
+  Gev = 'Gev',
+  HeavyTank = 'HeavyTank',
+  Howitzer = 'Howitzer',
+  LightGev = 'LightGev',
+  CruiseMissiles = 'CruiseMissiles',
+  Ogre = 'Ogre',
+  OgreDamaged = 'OgreDamaged',
 }
 
 export interface HasKey {

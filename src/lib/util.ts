@@ -25,6 +25,13 @@ export function range(length: number): number[] {
   return out;
 }
 
+export function mapReduce<K extends number | string, V>(arr: V[], keyFunc: ((elm: V) => K)): Record<K, V> {
+  return arr.reduce((obj, elm: V) => {
+    obj[keyFunc(elm)] = elm;
+    return obj;
+  }, {} as Record<K, V>);
+}
+
 export function filterEmpty<T>(arr: (T | undefined)[]): T[] {
   function notEmpty<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;

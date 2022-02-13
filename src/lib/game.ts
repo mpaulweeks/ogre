@@ -1,6 +1,5 @@
-import { Grid } from "./grid";
 import { Player } from "./player";
-import { BoardSquare, GameState, GridKey, HasState, OgreCard, OgreSquare, Team, UniqueId } from "./types";
+import { GameState, GridKey, HasState, OgreCard, OgreSquare, Team, UniqueId } from "./types";
 
 export class Game implements HasState<GameState> {
   readonly red: Player;
@@ -23,39 +22,27 @@ export class Game implements HasState<GameState> {
       [Team.Blue]: this.blue,
     })[team]
   }
-  playCard(card: OgreCard, dest: GridKey): void {
-    this.getPlayer(card.team).playCard(card, dest);
+  getEnemy(myTeam: Team): Player {
+    return ({
+      [Team.Red]: this.blue,
+      [Team.Blue]: this.red,
+    })[myTeam]
+  }
+  playCard(args: {
+    card: OgreCard;
+    deploy: GridKey;
+    attack?: OgreSquare;
+  }): void {
+    this.getPlayer(args.card.team).playCard(args.card, args.deploy);
+    if (args.attack) {
+      this.getEnemy(args.card.team).receiveAttack(args.attack);
+    }
   }
   getCard(id: UniqueId): OgreCard | undefined {
     return this.red.getCardFromHand(id) ?? this.blue.getCardFromHand(id) ?? undefined;
   }
   getSquare(key: GridKey): OgreSquare | undefined {
     return this.red.getSquareFromBoard(key) ?? this.blue.getSquareFromBoard(key) ?? undefined;
-  }
-  getVisibleSquares(): BoardSquare[][] {
-    const allPoints = [
-      this.red.getBase(),
-      this.blue.getBase(),
-      ...this.red.getState().board.map(os => os.key),
-      ...this.blue.getState().board.map(os => os.key),
-    ].map(key => Grid.parseKey(key));
-    const xMin = Math.min(...allPoints.map(p => p.x)) - 1;
-    const xMax = Math.max(...allPoints.map(p => p.x)) + 1;
-    const yMin = Math.min(...allPoints.map(p => p.y)) - 1;
-    const yMax = Math.max(...allPoints.map(p => p.y)) + 1;
-    const out: BoardSquare[][] = [];
-    for (let y = yMin; y <= yMax; y++) {
-      const row: BoardSquare[] = [];
-      out.push(row);
-      for (let x = xMin; x <= xMax; x++) {
-        const key = Grid.makeKey({ x, y });
-        row.push({
-          key,
-          square: this.getSquare(key),
-        });
-      }
-    }
-    return out;
   }
 
   getState() {

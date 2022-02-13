@@ -70,15 +70,17 @@ export class Player implements HasState<PlayerState> {
       hand.push(card);
     }
   }
-  playCard(card: OgreCard, dest: GridKey): void {
+  playCard(card: OgreCard, deploy: GridKey): void {
     const { hand, board } = this.state;
     assertRemove(card, hand);
-    board.push({
-      ...card,
-      key: dest,
-    });
+    if (card.unit !== Unit.CruiseMissiles) {
+      board.push({
+        ...card,
+        key: deploy,
+      });
+    }
   }
-  attackCard(square: OgreSquare) {
+  receiveAttack(square: OgreSquare) {
     const { board } = this.state;
     assertRemove(square, board);
     if (square.unit === Unit.Ogre) {

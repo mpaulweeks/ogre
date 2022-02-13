@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Game, GameState, GridKey, OgreCard } from '../lib';
+import { Game, GameState, GridKey, OgreCard, OgreSquare } from '../lib';
 import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
 
@@ -9,14 +9,19 @@ export function GameApp() {
 
   const game = Game.loadFromState(state);
   const playCard = (args: {
-    dest: GridKey;
-    attack?: GridKey;
+    deploy: GridKey;
+    attack?: OgreSquare;
   }) => {
     if (!selectedHand) {
       throw new Error('board cannot play card when selected is undefined');
     }
     // todo handle attack
-    game.playCard(selectedHand, args.dest);
+    game.playCard({
+      card: selectedHand,
+      deploy: args.deploy,
+      attack: args.attack,
+    });
+    setSelectedHand(undefined);
     setState(game.getState());
   };
 
