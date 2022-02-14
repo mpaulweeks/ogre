@@ -105,6 +105,7 @@ export class Player implements HasState<PlayerState> {
   playCard(card: OgreCard, deploy: GridKey): void {
     const { hand, board } = this;
     assertRemove(card, hand);
+    this.discard.push(card);
     if (card.unit !== Unit.CruiseMissile) {
       board.push({
         ...card,
@@ -115,6 +116,11 @@ export class Player implements HasState<PlayerState> {
   receiveAttack(square: OgreSquare) {
     const { board } = this;
     assertRemove(square, board);
+    this.discard.push({
+      id: square.id,
+      team: square.team,
+      unit: square.unit
+    });
     if (square.unit === Unit.Ogre) {
       board.push({
         key: square.key,
