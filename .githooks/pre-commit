@@ -1,4 +1,6 @@
 #!/bin/sh
 
 echo "Running .githooks/pre-commit"
-node bin/pre-commit.js
+verFile="public/version.json"
+node bin/pre-commit.js $verFile
+git add $verFile

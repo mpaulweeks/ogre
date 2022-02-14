@@ -1,6 +1,7 @@
 const fs = require('fs');
 
-const versionPath = 'public/version.json';
+// node bin/pre-commit.sh [versionPath]
+const versionPath = process.argv[2];
 console.log('Updating ' + versionPath);
 
 const versionFile = fs.readFileSync(versionPath);
