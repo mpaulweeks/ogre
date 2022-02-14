@@ -81,6 +81,9 @@ export function ViewLobby(props: {
     <div className='ViewLobby'>
       {/* <pre>{JSON.stringify(FIREBASE._config, null, 2)}</pre> */}
       <div>
+        Online Mode
+      </div>
+      <div>
         <button onClick={onCreate}>Create</button>
       </div>
       <div>
@@ -90,7 +93,7 @@ export function ViewLobby(props: {
         </form>
       </div>
       <div>
-        <button onClick={props.onExit}>Cancel</button>
+        <button onClick={props.onExit}>Back</button>
       </div>
     </div>
   )

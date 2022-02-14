@@ -13,7 +13,7 @@ const defaultView = (
   (window.location.search.includes('menu') && AppView.Menu) ||
   (window.location.search.includes('game') && AppView.Game) ||
   (window.location.search.includes('lobby') && AppView.Lobby) ||
-  AppView.Game
+  AppView.Menu
 );
 
 export function App() {
@@ -41,6 +41,16 @@ export function App() {
 
   // else
   return (
-    <div>Welcome to Game</div>
+    <div className='ViewMenu'>
+      <div>
+        Welcome to Game. This is very WIP
+      </div>
+      <div>
+        <button onClick={() => setView(AppView.Game)}>Play Offline</button>
+      </div>
+      <div>
+        <button onClick={() => setView(AppView.Lobby)}>Play Online</button>
+      </div>
+    </div>
   )
 }
