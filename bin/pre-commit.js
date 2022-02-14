@@ -7,5 +7,5 @@ const versionFile = fs.readFileSync(versionPath);
 const data = JSON.parse(versionFile.toString());
 data.updated = (new Date()).toLocaleString();
 data.version++;
-fs.writeFileSync(versionPath, JSON.stringify(data));
+fs.writeFileSync(versionPath, JSON.stringify(data, null, 2));
 console.log(data);
