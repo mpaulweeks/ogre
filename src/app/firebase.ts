@@ -2,7 +2,8 @@
 import { initializeApp } from 'firebase/app';
 import { Database, getDatabase, onValue, ref, set } from 'firebase/database';
 import { GameState } from '../lib';
-import { GameStateCallback, GameStateDisconnect, LobbyId } from './appTypes';
+import { GameStateCallback, GameStateDisconnect, LobbyData, LobbyDisconnect, LobbyId } from './appTypes';
+import { Lobby } from './lobby';
 
 // dotenv.config();
 const config = {
@@ -29,6 +30,48 @@ class FirebaseSingleton {
 
   private stateRef(lobbyId: LobbyId) {
     return ref(this.db, `lobby/${lobbyId}/state`);
+  }
+
+  async createLobby(state: GameState): Promise<{
+    lobbyId: string;
+    matched: Promise<void>;
+    disconnect: LobbyDisconnect;
+  }> {
+    let lobbyId = '';
+    let exists = true;
+    while (exists) {
+      lobbyId = Lobby.createId();
+      const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
+      exists = await new Promise(resolve => {
+        onValue(lobbyRef, snapshot => {
+          resolve(snapshot.exists());
+        }, { onlyOnce: true, });
+      });
+    }
+    const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
+    const newDto: LobbyData = {
+      ready: false,
+      state,
+    };
+    await set(lobbyRef, newDto);
+    console.log('lobby created on server!', lobbyId);
+    let resolveMatch: LobbyDisconnect;
+    const matched = new Promise<void>(resolve => {
+      resolveMatch = resolve;
+    });
+    const callback = onValue(lobbyRef, snapshot => {
+      const dto: LobbyData = snapshot.val();
+      if (dto.ready) {
+        resolveMatch();
+      }
+    });
+    // ensure DC once matched
+    matched.then(() => callback());
+    return {
+      lobbyId,
+      matched,
+      disconnect: callback,
+    }
   }
 
   async setState(lobbyId: LobbyId, state: GameState) {

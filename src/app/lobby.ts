@@ -1,4 +1,4 @@
-import { GameState } from "../lib";
+import { Game, GameState } from "../lib";
 import { GameStateCallback, GameStateDisconnect, LobbyId } from "./appTypes";
 import { FIREBASE } from "./firebase";
 
@@ -20,6 +20,17 @@ export class Lobby {
   }
 
   static createId(): LobbyId {
-    return (Math.random() * 100000).toString().padStart(6, '0');
+    return Math.floor(Math.random() * 100000).toString().padStart(6, '0');
+  }
+  static async createLobby() {
+    const state = Game.create().getState();
+    const result = await FIREBASE.createLobby(state);
+    const lobby = new Lobby(result.lobbyId);
+    console.log('lobby created!', lobby.id);
+    return {
+      lobby,
+      matched: result.matched,
+      disconnect: result.disconnect,
+    }
   }
 }
