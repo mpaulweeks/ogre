@@ -50,7 +50,7 @@ jobs:
       run: yarn build
 
     - name: Run tests
-      run: yarn test --all --ci --runInBand
+      run: yarn test --all --ci --runInBand --coverage
 
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@releases/v3

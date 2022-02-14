@@ -23,6 +23,7 @@
   },
   "scripts": {
     "preinstall": "git config core.hooksPath .githooks",
+    "coverage": "yarn test --coverage --watchAll=false",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
