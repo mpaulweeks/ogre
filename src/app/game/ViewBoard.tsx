@@ -45,11 +45,7 @@ export function ViewBoard(props: {
     ? board.getNeutralLightGevSquares(gridSquares)
     : [];
   const supplied = new Set([
-    ...(
-      (isMissle && []) ||
-      activePlayer?.getSupplied() ||
-      []
-    ),
+    ...activePlayer?.getSupplied(props.toPlay) ?? [],
     ...lightGevSupply,
   ]);
   const possibleAttacks: Set<GridKey> = new Set(
@@ -78,6 +74,7 @@ export function ViewBoard(props: {
     'Click square to attack'
   );
 
+  // todo convert to useCallback, break up and simplify somehow
   const onClick = () => {
     // handle bad states
     if (!props.toPlay || !enemyPlayer) {

@@ -73,7 +73,10 @@ export class Player implements HasState<PlayerState> {
   getSpotting(): GridKey[] {
     return unique(flatten(this.board.map(os => Grid.getSpotting(os))));
   }
-  getSupplied(): GridKey[] {
+  getSupplied(toPlay?: OgreCard): GridKey[] {
+    if (toPlay?.unit === Unit.CruiseMissile) {
+      return [];
+    }
     const visited: Set<GridKey> = new Set();
     const toExplore: GridKey[] = [this.getBase()];
     const toSupply: GridKey[] = [];
