@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Running node script"
+# node bin/pre-commit.js
