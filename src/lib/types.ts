@@ -37,7 +37,7 @@ export enum Unit {
   HeavyTank = 'HeavyTank',
   Howitzer = 'Howitzer',
   LightGev = 'LightGev',
-  CruiseMissiles = 'CruiseMissiles',
+  CruiseMissile = 'CruiseMissiles',
   Ogre = 'Ogre',
   OgreDamaged = 'OgreDamaged',
 }

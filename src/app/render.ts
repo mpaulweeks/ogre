@@ -2,14 +2,14 @@ import { Team, Unit } from "../lib";
 
 const CardName: Record<Unit, string> = {
   [Unit.Infantry]: 'Infantry',
-  [Unit.MissleTank]: 'MissleTank',
+  [Unit.MissleTank]: 'Missle Tank',
   [Unit.Gev]: 'Gev',
-  [Unit.HeavyTank]: 'HeavyTank',
+  [Unit.HeavyTank]: 'Heavy Tank',
   [Unit.Howitzer]: 'Howitzer',
-  [Unit.LightGev]: 'LightGev',
-  [Unit.CruiseMissiles]: 'CruiseMissiles',
+  [Unit.LightGev]: 'Light Gev',
+  [Unit.CruiseMissile]: 'Cruise Missile',
   [Unit.Ogre]: 'Ogre',
-  [Unit.OgreDamaged]: 'OgreDamaged',
+  [Unit.OgreDamaged]: 'Ogre (Damaged)',
 };
 export function getName(unit: Unit) {
   return CardName[unit];

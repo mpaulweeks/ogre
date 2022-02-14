@@ -31,7 +31,7 @@ const SupplyRange: Record<Unit, RawOffset[]> = {
   [Unit.HeavyTank]: UpDownLeftRight,
   [Unit.Howitzer]: UpDownLeftRight,
   [Unit.LightGev]: UpDownLeftRight,
-  [Unit.CruiseMissiles]: [],
+  [Unit.CruiseMissile]: [],
   [Unit.Ogre]: AllAdjacent,
   [Unit.OgreDamaged]: UpDownLeftRight,
 };
@@ -42,7 +42,7 @@ const AttackRange: Record<Unit, RawOffset[]> = {
   [Unit.HeavyTank]: UpDownLeftRight,
   [Unit.Howitzer]: HowizterAttack,
   [Unit.LightGev]: UpDownLeftRight,
-  [Unit.CruiseMissiles]: [], // todo
+  [Unit.CruiseMissile]: [], // todo
   [Unit.Ogre]: [
     ...AllAdjacent,
     { rx: 0, ry: -2 },
@@ -59,7 +59,7 @@ const SpottingRange: Record<Unit, RawOffset[]> = {
   [Unit.HeavyTank]: UpDownLeftRight,
   [Unit.Howitzer]: UpDownLeftRight,
   [Unit.LightGev]: UpDownLeftRight,
-  [Unit.CruiseMissiles]: [], // todo
+  [Unit.CruiseMissile]: [], // todo
   [Unit.Ogre]: [
     ...AllAdjacent,
     { rx: -1, ry: 2 },

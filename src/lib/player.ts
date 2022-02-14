@@ -77,7 +77,7 @@ export class Player implements HasState<PlayerState> {
   playCard(card: OgreCard, deploy: GridKey): void {
     const { hand, board } = this.state;
     assertRemove(card, hand);
-    if (card.unit !== Unit.CruiseMissiles) {
+    if (card.unit !== Unit.CruiseMissile) {
       board.push({
         ...card,
         key: deploy,
@@ -108,7 +108,7 @@ export class Player implements HasState<PlayerState> {
       ...range(2).map(_ => ({
         id: nextId(),
         team,
-        unit: Unit.CruiseMissiles,
+        unit: Unit.CruiseMissile,
       })),
       ...range(3).map(_ => library.pop()!),
     ];

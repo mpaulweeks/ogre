@@ -19,7 +19,7 @@ export function ViewBoard(props: {
   const activePlayer = props.toPlay && props.game.getPlayer(props.toPlay.team);
   const enemyPlayer = props.toPlay && props.game.getEnemy(props.toPlay.team);
   const isLightGev = props.toPlay?.unit === Unit.LightGev;
-  const isMissle = props.toPlay?.unit === Unit.CruiseMissiles;
+  const isMissle = props.toPlay?.unit === Unit.CruiseMissile;
   const isOgre = props.toPlay?.unit === Unit.Ogre;
 
   const board = new Board(props.game);
