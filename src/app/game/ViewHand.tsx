@@ -3,6 +3,7 @@ import { Player, OgreCard, Team } from '../../lib';
 import { ViewHandCard } from './ViewHandCard';
 
 export function ViewHand(props: {
+  hide: boolean;
   player: Player;
   selected?: OgreCard;
   setSelected(card: OgreCard | undefined): void;
@@ -13,18 +14,24 @@ export function ViewHand(props: {
     [Team.Red]: 'red',
     [Team.Blue]: 'blue',
   })[team];
+  const libraryStyle: React.CSSProperties = {
+    backgroundColor: libraryColor,
+    borderColor: libraryColor,
+    cursor: props.hide ? 'not-allowed' : 'pointer',
+  };
   return (
     <div className='ViewHand'>
       <div
         className='ViewCard ViewCardLibrary'
-        style={{ backgroundColor: libraryColor, borderColor: libraryColor, }}
-        onClick={props.draw}
+        style={libraryStyle}
+        onClick={props.hide ? () => { } : props.draw}
       >
         {library.length} cards remaining
       </div>
       {hand.map(card => (
         <ViewHandCard
           key={card.id}
+          hide={props.hide}
           card={card}
           isSelected={props.selected?.id === card.id}
           onClick={() => props.selected?.id === card.id ? props.setSelected(undefined) : props.setSelected(card)}

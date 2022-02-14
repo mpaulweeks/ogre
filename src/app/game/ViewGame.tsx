@@ -28,6 +28,9 @@ export function ViewGame(props: {
   }
 
   const game = Game.loadFromState(state);
+  const hideP1 = !!props.lobby && !props.lobby.isHost;
+  const hideP2 = !!props.lobby && props.lobby.isHost;
+
   const playCard = (args: {
     deploy: GridKey;
     attacks: OgreSquare[];
@@ -50,6 +53,7 @@ export function ViewGame(props: {
   return (
     <div className='ViewColumns'>
       <ViewHand
+        hide={hideP1}
         player={game.red}
         selected={selectedHand}
         setSelected={setSelectedHand}
@@ -61,6 +65,7 @@ export function ViewGame(props: {
         playCard={playCard}
       />
       <ViewHand
+        hide={hideP2}
         player={game.blue}
         selected={selectedHand}
         setSelected={setSelectedHand}
