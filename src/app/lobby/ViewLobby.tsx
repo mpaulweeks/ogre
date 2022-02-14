@@ -53,11 +53,15 @@ export function ViewLobby(props: {
   if (status === LobbyStatus.WaitingForEnemy) {
     return (
       <div className='ViewLobby'>
-        created lobby {createdLobbyId}
-        <br />
-        waiting for enemy to join...
-        <br />
-        <button onClick={onCreateCancel}>CANCEL</button>
+        <div>
+          created lobby {createdLobbyId}
+        </div>
+        <div>
+          waiting for enemy to join...
+        </div>
+        <div>
+          <button onClick={onCreateCancel}>CANCEL</button>
+        </div>
       </div>
     );
   }
@@ -80,8 +84,10 @@ export function ViewLobby(props: {
         <button onClick={onCreate}>Create</button>
       </div>
       <div>
-        <input value={joinLobbyId} onChange={e => setJoinLobbyId(e.target.value)} />
-        <button onClick={onJoin}>Join</button>
+        <form>
+          <input value={joinLobbyId} onChange={e => setJoinLobbyId(e.target.value)} />
+          <button type="submit" onClick={onJoin}>Join</button>
+        </form>
       </div>
       <div>
         <button onClick={props.onExit}>Cancel</button>
