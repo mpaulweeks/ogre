@@ -28,7 +28,9 @@ export function ViewHand(props: {
         style={libraryStyle}
         onClick={props.hide ? () => { } : props.draw}
       >
-        {library.length} cards remaining
+        deck: {library.length}
+        <br />
+        hand: {hand.length}
       </div>
       {hand.map(card => (
         <ViewHandCard

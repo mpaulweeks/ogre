@@ -35,6 +35,8 @@
 
   padding: 1em;
   background-color: #eee;
+
+  user-select: none;
 }
 
 .ViewBoard {
