@@ -31,22 +31,17 @@ export function ViewBoard(props: {
   } : undefined;
   const gridSquares = board.getVisibleSquares(tempSquare);
 
-  const enemySquares = new Set(
-    enemyPlayer
-      ? enemyPlayer.state.board.map(os => os.key)
-      : []
+  const enemySquares: Set<GridKey> = new Set(
+    enemyPlayer?.state.board.map(os => os.key) ?? []
   );
-  const spotting = new Set(
-    (enemyPlayer && isMissle)
-      ? enemyPlayer.state.board.map(os => os.key)
-      : (activePlayer?.getSpotting() ?? [])
+  const spotting: Set<GridKey> = new Set(
+    isMissle
+      ? enemyPlayer?.state.board.map(os => os.key) ?? []
+      : activePlayer?.getSpotting() ?? []
   );
-  const lightGevSupply = isLightGev
-    ? board.getNeutralLightGevSquares(gridSquares)
-    : [];
-  const supplied = new Set([
+  const supplied: Set<GridKey> = new Set([
     ...activePlayer?.getSupplied(props.toPlay) ?? [],
-    ...lightGevSupply,
+    ...isLightGev ? board.getNeutralLightGevSquares(gridSquares) : [],
   ]);
   const possibleAttacks: Set<GridKey> = new Set(
     isMissle
