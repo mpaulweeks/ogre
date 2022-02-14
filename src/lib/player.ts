@@ -46,7 +46,7 @@ export class Player implements HasState<PlayerState> {
     this.discard = state.discard;
   }
 
-  getBase(): GridKey {
+  get base(): GridKey {
     return ({
       [Team.Red]: RedBase,
       [Team.Blue]: BlueBase,
@@ -78,7 +78,7 @@ export class Player implements HasState<PlayerState> {
       return [];
     }
     const visited: Set<GridKey> = new Set();
-    const toExplore: GridKey[] = [this.getBase()];
+    const toExplore: GridKey[] = [this.base];
     const toSupply: GridKey[] = [];
     while (toExplore.length) {
       const next = toExplore.pop()!;
