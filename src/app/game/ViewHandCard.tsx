@@ -8,12 +8,14 @@ export function ViewHandCard(props: {
   hide: boolean;
   card: OgreCard;
 }) {
+
   const backgroundColor = getBackgroundColor(props.card.team);
   const style: React.CSSProperties = {
     backgroundColor,
     borderColor: props.isSelected ? 'black' : backgroundColor,
     cursor: props.hide ? 'not-allowed' : 'pointer',
   };
+
   return (
     <div
       className='ViewCard'

@@ -12,6 +12,7 @@ export function ViewSquare(props: {
   onHover(): void;
   onClick(): void;
 }) {
+
   const isNeutral = !props.square && props.gridKey === NeutralSpace;
   const isRedBase = !props.square && props.gridKey === RedBase;
   const isBlueBase = !props.square && props.gridKey === BlueBase;
@@ -45,6 +46,7 @@ export function ViewSquare(props: {
     (props.square && getName(props.square.unit)) ||
     ''
   );
+
   return (
     <div
       className='ViewCard'

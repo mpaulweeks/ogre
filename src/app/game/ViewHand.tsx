@@ -9,6 +9,7 @@ export function ViewHand(props: {
   setSelected(card: OgreCard | undefined): void;
   draw(): void;
 }) {
+
   const { team, hand, library } = props.player.state;
   const libraryColor = ({
     [Team.Red]: 'red',
@@ -19,6 +20,7 @@ export function ViewHand(props: {
     borderColor: libraryColor,
     cursor: props.hide ? 'not-allowed' : 'pointer',
   };
+
   return (
     <div className='ViewHand'>
       <div
