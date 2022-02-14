@@ -49,8 +49,8 @@ jobs:
         CI: false
       run: yarn build
 
-    # - name: Run tests
-    #   run: yarn test
+    - name: Run tests
+      run: yarn jest --runInBand
 
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
