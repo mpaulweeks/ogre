@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ViewGame } from "./game/ViewGame";
 import { ViewLobby } from './lobby/ViewLobby';
 import './appStyles.css';
+import { Lobby } from './lobby';
 
 enum AppView {
   Menu = 'Menu',
@@ -18,7 +19,7 @@ const defaultView = (
 
 export function App() {
   const [view, setView] = useState<AppView>(defaultView);
-  const [lobby, setLobby] = useState<any | undefined>();
+  const [lobby, setLobby] = useState<Lobby | undefined>();
 
   if (view === AppView.Game) {
     return (
@@ -27,7 +28,7 @@ export function App() {
   }
 
   if (view === AppView.Lobby) {
-    const onMatch = (lobby: any) => {
+    const onMatch = (lobby: Lobby) => {
       setLobby(lobby);
       setView(AppView.Game);
     };

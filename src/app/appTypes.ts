@@ -2,7 +2,7 @@ import { GameState } from "../lib";
 
 export interface LobbyData {
   ready: boolean;
-  state: GameState;
+  stateJson: string; // GameState
 }
 export type LobbyId = string;
 export type LobbyDisconnect = () => void;

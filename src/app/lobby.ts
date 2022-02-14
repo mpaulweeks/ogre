@@ -29,7 +29,7 @@ export class Lobby {
     const state = Game.create().getState();
     // const result = await FIREBASE.createLobby(state);
     // temp to make testing easier
-    const result = await FIREBASE.createLobby(state, '123');
+    const result = await FIREBASE.createLobby(state, '123456');
     const lobby = new Lobby(true, result.lobbyId);
     console.log('lobby created!', lobby.id);
     return {

@@ -23,13 +23,15 @@ class FirebaseSingleton {
   readonly _config = config;
 
   constructor() {
-    console.log(config);
     initializeApp(config);
     this.db = getDatabase();
   }
 
+  private lobbyRef(lobbyId: LobbyId) {
+    return ref(this.db, `lobby/${lobbyId}`);
+  }
   private stateRef(lobbyId: LobbyId) {
-    return ref(this.db, `lobby/${lobbyId}/state`);
+    return ref(this.db, `lobby/${lobbyId}/stateJson`);
   }
 
   async createLobby(state: GameState, forceId?: string): Promise<{
@@ -41,17 +43,17 @@ class FirebaseSingleton {
     let exists = true;
     while (exists && !forceId) {
       lobbyId = Lobby.createId();
-      const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
+      const lobbyRef = this.lobbyRef(lobbyId);
       exists = await new Promise(resolve => {
         onValue(lobbyRef, snapshot => {
           resolve(snapshot.exists());
         }, { onlyOnce: true, });
       });
     }
-    const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
+    const lobbyRef = this.lobbyRef(lobbyId);
     const newDto: LobbyData = {
       ready: false,
-      state,
+      stateJson: JSON.stringify(state),
     };
     await set(lobbyRef, newDto);
     console.log('lobby created on server!', lobbyId);
@@ -65,42 +67,46 @@ class FirebaseSingleton {
         resolveMatch();
       }
     });
-    // ensure DC once matched
-    matched.then(() => callback());
+    // ensure DC once matched? or maybe not
+    // matched.then(() => callback());
     return {
       lobbyId,
       matched,
       disconnect: callback,
     }
   }
-  async joinLobby(lobbyId: LobbyId): Promise<GameState | undefined> {
+  async joinLobby(lobbyId: LobbyId): Promise<boolean> {
     const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
-    const state = await new Promise<GameState | void>(resolve => {
+    const joinable = await new Promise<boolean>(resolve => {
       onValue(lobbyRef, snapshot => {
         if (!snapshot.exists()) {
-          return resolve();
+          return resolve(false);
         }
         const data: LobbyData = snapshot.val();
         if (data.ready !== false) {
-          return resolve();
+          return resolve(false);
         }
         // else
-        resolve(data.state);
+        resolve(true);
       }, { onlyOnce: true, });
     });
-    if (!state) { return; }
+    if (!joinable) { return false; }
 
     const readyRef = ref(this.db, `lobby/${lobbyId}/ready`);
     await set(readyRef, true);
-    return state;
+    return true;
   }
 
   async setState(lobbyId: LobbyId, state: GameState) {
-    await set(this.stateRef(lobbyId), state);
+    await set(this.stateRef(lobbyId), JSON.stringify(state));
   }
   listenForState(lobbyId: LobbyId, cb: GameStateCallback): GameStateDisconnect {
     return onValue(this.stateRef(lobbyId), snapshot => {
-      cb(snapshot.val());
+      const stateJson: string = snapshot.val();
+      console.log(stateJson);
+      const state: GameState = JSON.parse(stateJson);
+      console.log(stateJson, state);
+      cb(state);
     });
   }
 }

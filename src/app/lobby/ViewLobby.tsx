@@ -11,11 +11,11 @@ enum LobbyStatus {
 }
 
 export function ViewLobby(props: {
-  onMatch(lobby: any): void;
+  onMatch(lobby: Lobby): void;
   onExit(): void;
 }) {
   const [status, setStatus] = useState<LobbyStatus>(LobbyStatus.Idle);
-  const [joinLobbyId, setJoinLobbyId] = useState('');
+  const [joinLobbyId, setJoinLobbyId] = useState('123456');
   const [createdLobbyId, setCreatedLobbyId] = useState('');
   const [disconnect, setDisconnect] = useState<LobbyDisconnect>(() => () => { });
 
