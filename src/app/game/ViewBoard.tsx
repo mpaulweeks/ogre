@@ -50,10 +50,10 @@ export function ViewBoard(props: {
       ? context?.enemy.state.board.map(os => os.key) ?? []
       : context?.active.getSpotting() ?? []
   );
-  const supplied: Set<GridKey> = new Set([
+  const allValidDeploys: Set<GridKey> = new Set([
     ...context?.active.getSupplied(context.toPlay) ?? [],
     ...isLightGev ? board.getNeutralLightGevSquares(gridSquares) : [],
-  ]);
+  ].filter(key => !enemySquares.has(key)));
   const possibleAttacks: Set<GridKey> = new Set(
     !context ? [] : (
       isMissle
@@ -99,7 +99,7 @@ export function ViewBoard(props: {
     }
     // handle 1st click
     if (!deploy) {
-      const validDeploy = supplied.has(hover);
+      const validDeploy = allValidDeploys.has(hover);
       if (validDeploy) {
         if (allValidAttacks.size > 0) {
           setDeploy(hover);
@@ -142,7 +142,7 @@ export function ViewBoard(props: {
               key={gs.key}
               isHover={gs.key === hover || gs.key === ogreAttack1?.key}
               isSpotted={spotting.has(gs.key)}
-              isSupplied={supplied.has(gs.key)}
+              isSupplied={allValidDeploys.has(gs.key)}
               isAttacking={possibleAttacks.has(gs.key)}
               gridKey={gs.key}
               square={gs.square}
