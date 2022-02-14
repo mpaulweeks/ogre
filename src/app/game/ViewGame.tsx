@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Game, GameState, GridKey, HistoryTracker, OgreCard, OgreSquare, Player } from '../../lib';
 import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
@@ -16,27 +16,31 @@ export function ViewGame(props: {
   const [selectedHand, setSelectedHand] = useState<OgreCard | undefined>();
   const history = useRef(new HistoryTracker<GameState>([state]));
 
-  const refreshState = (state: GameState, localOnly?: boolean) => {
-    history.current.set(state);
+  // define once, deps should never change
+  const refreshState = useCallback((newState: GameState, localOnly?: boolean) => {
+    history.current.set(newState);
     setSelectedHand(undefined);
-    setState(state);
+    setState(newState);
     if (props.lobby && !localOnly) {
-      props.lobby.sendState(state);
+      props.lobby.sendState(newState);
     }
-  }
+  }, [props.lobby, setSelectedHand, setState, history]);
 
+  // define once, deps should never change
   useEffect(() => {
     if (props.lobby) {
+      console.log('setting callback');
       // setting callback invokes once, ensuring both players get synced to lobby gameState
       props.lobby.setCallback(gs => refreshState(gs, true));
     }
-  }, [props.lobby, setState]);
+  }, [props.lobby, setState, refreshState]);
 
-
+  // convenience vars
   const game = Game.loadFromState(state);
   const hideP1 = !noHide && !!props.lobby && !props.lobby.isHost;
   const hideP2 = !noHide && !!props.lobby && props.lobby.isHost;
 
+  // redefine helper funcs everytime
   const playCard = (args: {
     deploy: GridKey;
     attacks: OgreSquare[];
