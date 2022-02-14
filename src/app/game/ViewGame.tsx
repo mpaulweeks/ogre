@@ -1,36 +1,41 @@
-import React, { useState } from 'react';
-import { Game, GameState, GridKey, OgreCard, OgreSquare, Player } from '../../lib';
+import React, { useRef, useState } from 'react';
+import { Game, GameState, GridKey, HistoryTracker, OgreCard, OgreSquare, Player } from '../../lib';
 import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
 import './gameStyles.css';
 import { Lobby } from '../lobby';
 import { useEffect } from 'react';
 
+const noHide = window.location.search.includes('nohide');
+
 export function ViewGame(props: {
-  lobby?: Lobby; // todo
+  lobby?: Lobby;
   onExit(): void;
 }) {
   const [state, setState] = useState<GameState>(Game.create().getState());
   const [selectedHand, setSelectedHand] = useState<OgreCard | undefined>();
+  const history = useRef(new HistoryTracker<GameState>([state]));
 
-  useEffect(() => {
-    if (props.lobby) {
-      props.lobby.setCallback(gs => setState(gs));
-    }
-  }, [props.lobby, setState]);
-
-  const refreshState = (game: Game) => {
-    const newState = game.getState();
+  const refreshState = (state: GameState, localOnly?: boolean) => {
+    history.current.set(state);
     setSelectedHand(undefined);
-    setState(newState);
-    if (props.lobby) {
-      props.lobby.sendState(newState);
+    setState(state);
+    if (props.lobby && !localOnly) {
+      props.lobby.sendState(state);
     }
   }
 
+  useEffect(() => {
+    if (props.lobby) {
+      // setting callback invokes once, ensuring both players get synced to lobby gameState
+      props.lobby.setCallback(gs => refreshState(gs, true));
+    }
+  }, [props.lobby, setState]);
+
+
   const game = Game.loadFromState(state);
-  const hideP1 = !!props.lobby && !props.lobby.isHost;
-  const hideP2 = !!props.lobby && props.lobby.isHost;
+  const hideP1 = !noHide && !!props.lobby && !props.lobby.isHost;
+  const hideP2 = !noHide && !!props.lobby && props.lobby.isHost;
 
   const playCard = (args: {
     deploy: GridKey;
@@ -44,14 +49,17 @@ export function ViewGame(props: {
       deploy: args.deploy,
       attacks: args.attacks,
     });
-    refreshState(game);
+    refreshState(game.getState());
   };
   const onDraw = (player: Player) => {
-    player.drawForTurn();
-    refreshState(game);
+    game.draw(player.getState().team);
+    refreshState(game.getState());
   }
   const onUndo = () => {
-    // todo
+    const previous = history.current.get(state.tick - 1);
+    if (previous) {
+      refreshState(previous);
+    }
   }
 
   return (

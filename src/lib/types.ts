@@ -1,21 +1,24 @@
 
 export type UniqueId = number;
 export interface HasId {
-  id: UniqueId;
+  readonly id: UniqueId;
+}
+export interface HasTicks {
+  readonly tick: number;
 }
 
 export type GridKey = string;
 export interface GridPoint {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 export interface OrientedOffest {
-  dx: number;
-  dy: number;
+  readonly dx: number;
+  readonly dy: number;
 }
 export interface RawOffset {
-  rx: number;
-  ry: number;
+  readonly rx: number;
+  readonly ry: number;
 }
 export const NeutralSpace: GridKey = '0,0';
 export const RedBase: GridKey = '0,-1';
@@ -66,10 +69,9 @@ export interface PlayerState {
   readonly discard: OgreCard[];
 }
 
-export interface GameState {
+export interface GameState extends HasTicks {
   readonly red: PlayerState;
   readonly blue: PlayerState;
-  readonly turn: number;
 }
 
 export interface GameAction {

@@ -103,9 +103,7 @@ class FirebaseSingleton {
   listenForState(lobbyId: LobbyId, cb: GameStateCallback): GameStateDisconnect {
     return onValue(this.stateRef(lobbyId), snapshot => {
       const stateJson: string = snapshot.val();
-      console.log(stateJson);
       const state: GameState = JSON.parse(stateJson);
-      console.log(stateJson, state);
       cb(state);
     });
   }

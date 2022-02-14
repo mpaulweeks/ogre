@@ -4,16 +4,16 @@ import { GameState, GridKey, HasState, OgreCard, OgreSquare, Team, UniqueId } fr
 export class Game implements HasState<GameState> {
   readonly red: Player;
   readonly blue: Player;
-  private turn: number;
+  private tick: number;
 
   private constructor(args: {
-    turn: number,
+    tick: number,
     red: Player,
     blue: Player,
   }) {
     this.red = args.red;
     this.blue = args.blue;
-    this.turn = args.turn;
+    this.tick = args.tick;
   }
 
   getPlayer(team: Team): Player {
@@ -28,16 +28,23 @@ export class Game implements HasState<GameState> {
       [Team.Blue]: this.red,
     })[myTeam]
   }
+
   playCard(args: {
     card: OgreCard;
     deploy: GridKey;
     attacks: OgreSquare[];
   }): void {
+    this.tick++;
     this.getPlayer(args.card.team).playCard(args.card, args.deploy);
     args.attacks.forEach(os => {
       this.getEnemy(args.card.team).receiveAttack(os);
     });
   }
+  draw(team: Team) {
+    this.tick++;
+    this.getPlayer(team).drawForTurn();
+  }
+
   getCard(id: UniqueId): OgreCard | undefined {
     return this.red.getCardFromHand(id) ?? this.blue.getCardFromHand(id) ?? undefined;
   }
@@ -47,13 +54,13 @@ export class Game implements HasState<GameState> {
 
   getState() {
     return {
-      turn: this.turn,
+      tick: this.tick,
       red: this.red.getState(),
       blue: this.blue.getState(),
     };
   }
   loadState(state: GameState) {
-    this.turn = state.turn;
+    this.tick = state.tick;
     this.red.loadState(state.red);
     this.blue.loadState(state.blue);
   }
@@ -65,7 +72,7 @@ export class Game implements HasState<GameState> {
   }
   static create() {
     return new Game({
-      turn: 0,
+      tick: 0,
       red: Player.create(Team.Red),
       blue: Player.create(Team.Blue),
     })

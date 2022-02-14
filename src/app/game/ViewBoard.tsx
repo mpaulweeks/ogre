@@ -154,12 +154,14 @@ export function ViewBoard(props: {
         onClick={props.onUndo}
       >
         UNDO
+        <br />
+        <code># {props.game.getState().tick.toString().padStart(3, '0')}</code>
       </div>
       <div
         className='ViewCard ViewBoardExit'
         onClick={props.onExit}
       >
-        EXIT
+        EXIT GAME
       </div>
     </div>
   )
