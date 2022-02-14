@@ -12,7 +12,7 @@ export function ViewGame(props: {
   lobby?: Lobby;
   onExit(): void;
 }) {
-  const [state, setState] = useState<GameState>(Game.create().getState());
+  const [state, setState] = useState<GameState>(Game.create().state);
   const [selectedHand, setSelectedHand] = useState<OgreCard | undefined>();
   const history = useRef(new HistoryTracker<GameState>([state]));
 
@@ -49,11 +49,11 @@ export function ViewGame(props: {
       deploy: args.deploy,
       attacks: args.attacks,
     });
-    refreshState(game.getState());
+    refreshState(game.state);
   };
   const onDraw = (player: Player) => {
-    game.draw(player.getState().team);
-    refreshState(game.getState());
+    game.draw(player.state.team);
+    refreshState(game.state);
   }
   const onUndo = () => {
     const previous = history.current.get(state.tick - 1);

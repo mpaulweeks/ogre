@@ -26,7 +26,7 @@ export class Lobby {
     return Math.floor(Math.random() * 100000).toString().padStart(6, '0');
   }
   static async createLobby() {
-    const state = Game.create().getState();
+    const state = Game.create().state;
     // const result = await FIREBASE.createLobby(state);
     // temp to make testing easier
     const result = await FIREBASE.createLobby(state, '123456');

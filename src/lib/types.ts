@@ -58,7 +58,7 @@ export interface BoardSquare extends HasKey {
 }
 
 export interface HasState<T> {
-  getState(): T;
+  get state(): T;
   loadState(state: T): void;
 }
 export interface PlayerState {

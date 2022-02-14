@@ -17,21 +17,46 @@ function startingUnits(): Unit[] {
 }
 
 export class Player implements HasState<PlayerState> {
-  private constructor(private state: PlayerState) { }
-  getState() { return this.state; }
-  loadState(state: PlayerState) { this.state = state; }
+  private team: Team;
+  private hand: OgreCard[];
+  private library: OgreCard[];
+  private board: OgreSquare[];
+  private discard: OgreCard[];
+  private constructor(state: PlayerState) {
+    this.team = state.team;
+    this.hand = state.hand;
+    this.library = state.library;
+    this.board = state.board;
+    this.discard = state.discard;
+  }
+  get state() {
+    return {
+      team: this.team,
+      hand: this.hand,
+      library: this.library,
+      board: this.board,
+      discard: this.discard,
+    }
+  }
+  loadState(state: PlayerState) {
+    this.team = state.team;
+    this.hand = state.hand;
+    this.library = state.library;
+    this.board = state.board;
+    this.discard = state.discard;
+  }
 
   getBase(): GridKey {
     return ({
       [Team.Red]: RedBase,
       [Team.Blue]: BlueBase,
-    })[this.state.team];
+    })[this.team];
   }
   getSquareFromBoard(key: GridKey): OgreSquare | undefined {
-    return this.state.board.filter(os => os.key === key)[0];
+    return this.board.filter(os => os.key === key)[0];
   }
   getCardFromHand(id: UniqueId): OgreCard | undefined {
-    return this.state.hand.filter(oc => oc.id === id)[0];
+    return this.hand.filter(oc => oc.id === id)[0];
   }
 
   getAttacking(card: OgreCard, dest: GridKey): GridKey[] {
@@ -41,12 +66,12 @@ export class Player implements HasState<PlayerState> {
     };
     const spotted = new Set(this.getSpotting());
     const possibleAttacks = Grid.getSpottedAttacks(tempSquare, spotted);
-    const friendlySpaces = mapReduce(this.getState().board, os => os.key);
+    const friendlySpaces = mapReduce(this.board, os => os.key);
     const noFriendlyFire = possibleAttacks.filter(key => !friendlySpaces[key]);
     return noFriendlyFire;
   }
   getSpotting(): GridKey[] {
-    return unique(flatten(this.state.board.map(os => Grid.getSpotting(os))));
+    return unique(flatten(this.board.map(os => Grid.getSpotting(os))));
   }
   getSupplied(): GridKey[] {
     const visited: Set<GridKey> = new Set();
@@ -68,14 +93,14 @@ export class Player implements HasState<PlayerState> {
   }
 
   drawForTurn(): void {
-    const { hand, library } = this.state;
+    const { hand, library } = this;
     const card = library.pop();
     if (card) {
       hand.push(card);
     }
   }
   playCard(card: OgreCard, deploy: GridKey): void {
-    const { hand, board } = this.state;
+    const { hand, board } = this;
     assertRemove(card, hand);
     if (card.unit !== Unit.CruiseMissile) {
       board.push({
@@ -85,7 +110,7 @@ export class Player implements HasState<PlayerState> {
     }
   }
   receiveAttack(square: OgreSquare) {
-    const { board } = this.state;
+    const { board } = this;
     assertRemove(square, board);
     if (square.unit === Unit.Ogre) {
       board.push({

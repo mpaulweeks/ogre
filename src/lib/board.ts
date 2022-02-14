@@ -15,8 +15,8 @@ export class Board {
     const { game } = this;
     const squares = [
       ...(tempSquare ? [tempSquare] : []),
-      ...game.red.getState().board,
-      ...game.blue.getState().board,
+      ...game.red.state.board,
+      ...game.blue.state.board,
     ];
     return this.get2dGrid(squares);
   }

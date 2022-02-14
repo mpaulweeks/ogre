@@ -52,11 +52,11 @@ export class Game implements HasState<GameState> {
     return this.red.getSquareFromBoard(key) ?? this.blue.getSquareFromBoard(key) ?? undefined;
   }
 
-  getState() {
+  get state() {
     return {
       tick: this.tick,
-      red: this.red.getState(),
-      blue: this.blue.getState(),
+      red: this.red.state,
+      blue: this.blue.state,
     };
   }
   loadState(state: GameState) {

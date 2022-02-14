@@ -33,12 +33,12 @@ export function ViewBoard(props: {
 
   const enemySquares = new Set(
     enemyPlayer
-      ? enemyPlayer.getState().board.map(os => os.key)
+      ? enemyPlayer.state.board.map(os => os.key)
       : []
   );
   const spotting = new Set(
     (enemyPlayer && isMissle)
-      ? enemyPlayer.getState().board.map(os => os.key)
+      ? enemyPlayer.state.board.map(os => os.key)
       : (activePlayer?.getSpotting() ?? [])
   );
   const lightGevSupply = isLightGev
@@ -54,7 +54,7 @@ export function ViewBoard(props: {
   ]);
   const possibleAttacks: Set<GridKey> = new Set(
     isMissle
-      ? enemyPlayer?.getState().board.map(os => os.key) ?? []
+      ? enemyPlayer?.state.board.map(os => os.key) ?? []
       : (
         (props.toPlay && activePlayer) && (
           (deploy && activePlayer.getAttacking(props.toPlay, deploy)) ||
@@ -155,7 +155,7 @@ export function ViewBoard(props: {
       >
         UNDO
         <br />
-        <code># {props.game.getState().tick.toString().padStart(3, '0')}</code>
+        <code># {props.game.state.tick.toString().padStart(3, '0')}</code>
       </div>
       <div
         className='ViewCard ViewBoardExit'

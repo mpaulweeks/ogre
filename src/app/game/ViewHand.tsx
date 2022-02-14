@@ -9,7 +9,7 @@ export function ViewHand(props: {
   setSelected(card: OgreCard | undefined): void;
   draw(): void;
 }) {
-  const { team, hand, library } = props.player.getState();
+  const { team, hand, library } = props.player.state;
   const libraryColor = ({
     [Team.Red]: 'red',
     [Team.Blue]: 'blue',
