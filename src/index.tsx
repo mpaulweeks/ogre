@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './app/App';
-import { ViewVersion } from './app/ViewVersion';
+import { VersionOverlay } from './app/VersionOverlay';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <ViewVersion />
+    <VersionOverlay />
   </React.StrictMode>,
   document.getElementById('root')
 );

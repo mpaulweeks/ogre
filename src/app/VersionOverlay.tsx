@@ -5,7 +5,7 @@ interface Version {
   version: number;
 }
 
-export function ViewVersion() {
+export function VersionOverlay() {
   const [data, setData] = useState<Version | undefined>();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function ViewVersion() {
     left: '1em',
     bottom: '1em',
     fontSize: '0.5em',
-  }
+  };
 
   return (
     <div style={style}>
