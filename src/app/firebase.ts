@@ -32,14 +32,14 @@ class FirebaseSingleton {
     return ref(this.db, `lobby/${lobbyId}/state`);
   }
 
-  async createLobby(state: GameState): Promise<{
+  async createLobby(state: GameState, forceId?: string): Promise<{
     lobbyId: string;
     matched: Promise<void>;
     disconnect: LobbyDisconnect;
   }> {
-    let lobbyId = '';
+    let lobbyId = forceId ?? '';
     let exists = true;
-    while (exists) {
+    while (exists && !forceId) {
       lobbyId = Lobby.createId();
       const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
       exists = await new Promise(resolve => {
@@ -72,6 +72,27 @@ class FirebaseSingleton {
       matched,
       disconnect: callback,
     }
+  }
+  async joinLobby(lobbyId: LobbyId): Promise<GameState | undefined> {
+    const lobbyRef = ref(this.db, `lobby/${lobbyId}`);
+    const state = await new Promise<GameState | void>(resolve => {
+      onValue(lobbyRef, snapshot => {
+        if (!snapshot.exists()) {
+          return resolve();
+        }
+        const data: LobbyData = snapshot.val();
+        if (data.ready !== false) {
+          return resolve();
+        }
+        // else
+        resolve(data.state);
+      }, { onlyOnce: true, });
+    });
+    if (!state) { return; }
+
+    const readyRef = ref(this.db, `lobby/${lobbyId}/ready`);
+    await set(readyRef, true);
+    return state;
   }
 
   async setState(lobbyId: LobbyId, state: GameState) {

@@ -1,4 +1,15 @@
 .ViewLobby {
   width: 100%;
   height: 100vh;
+
+  padding: 2em;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.ViewLobby > div {
+  margin: 1em;
 }

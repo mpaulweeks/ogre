@@ -5,7 +5,10 @@ import { FIREBASE } from "./firebase";
 export class Lobby {
   private readonly fb = FIREBASE;
   private disconnectCallback: GameStateDisconnect = () => { };
-  constructor(readonly id: LobbyId) { }
+  constructor(
+    readonly isHost: boolean,
+    readonly id: LobbyId,
+  ) { }
 
   sendState(state: GameState) {
     this.fb.setState(this.id, state);
@@ -24,13 +27,19 @@ export class Lobby {
   }
   static async createLobby() {
     const state = Game.create().getState();
-    const result = await FIREBASE.createLobby(state);
-    const lobby = new Lobby(result.lobbyId);
+    // const result = await FIREBASE.createLobby(state);
+    // temp to make testing easier
+    const result = await FIREBASE.createLobby(state, '123');
+    const lobby = new Lobby(true, result.lobbyId);
     console.log('lobby created!', lobby.id);
     return {
       lobby,
       matched: result.matched,
       disconnect: result.disconnect,
     }
+  }
+  static async joinLobby(lobbyId: LobbyId): Promise<Lobby | void> {
+    const state = await FIREBASE.joinLobby(lobbyId);
+    return state ? new Lobby(false, lobbyId) : undefined;
   }
 }

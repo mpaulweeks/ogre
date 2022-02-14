@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './lobbyStyles.css';
-import { FIREBASE } from '../firebase';
 import { Lobby } from '../lobby';
 import { LobbyDisconnect } from '../appTypes';
 
@@ -8,6 +7,7 @@ enum LobbyStatus {
   Idle,
   WaitingForNetwork,
   WaitingForEnemy,
+  LobbyNotFound,
 }
 
 export function ViewLobby(props: {
@@ -15,13 +15,14 @@ export function ViewLobby(props: {
   onExit(): void;
 }) {
   const [status, setStatus] = useState<LobbyStatus>(LobbyStatus.Idle);
-  const [lobbyId, setLobbyId] = useState<string>('');
+  const [joinLobbyId, setJoinLobbyId] = useState('');
+  const [createdLobbyId, setCreatedLobbyId] = useState('');
   const [disconnect, setDisconnect] = useState<LobbyDisconnect>(() => () => { });
 
   const onCreate = async () => {
     setStatus(LobbyStatus.WaitingForNetwork);
     const conn = await Lobby.createLobby();
-    setLobbyId(conn.lobby.id);
+    setCreatedLobbyId(conn.lobby.id);
     setDisconnect(() => conn.disconnect);
     setStatus(LobbyStatus.WaitingForEnemy);
     await conn.matched;
@@ -31,6 +32,15 @@ export function ViewLobby(props: {
     disconnect();
     setDisconnect(() => { });
     setStatus(LobbyStatus.Idle);
+  }
+  const onJoin = async () => {
+    setStatus(LobbyStatus.WaitingForNetwork);
+    const lobby = await Lobby.joinLobby(joinLobbyId);
+    if (lobby) {
+      props.onMatch(lobby);
+    } else {
+      setStatus(LobbyStatus.LobbyNotFound);
+    }
   }
 
   if (status === LobbyStatus.WaitingForNetwork) {
@@ -43,7 +53,7 @@ export function ViewLobby(props: {
   if (status === LobbyStatus.WaitingForEnemy) {
     return (
       <div className='ViewLobby'>
-        created lobby {lobbyId}
+        created lobby {createdLobbyId}
         <br />
         waiting for enemy to join...
         <br />
@@ -51,11 +61,31 @@ export function ViewLobby(props: {
       </div>
     );
   }
+  if (status === LobbyStatus.LobbyNotFound) {
+    return (
+      <div className='ViewLobby'>
+        <div>
+          not found
+        </div>
+        <div>
+          <button onClick={() => setStatus(LobbyStatus.Idle)}>OK</button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className='ViewLobby'>
-      <pre>{JSON.stringify(FIREBASE._config, null, 2)}</pre>
-      <button onClick={onCreate}>CREATE</button>
-      <button onClick={props.onExit}>CANCEL</button>
+      {/* <pre>{JSON.stringify(FIREBASE._config, null, 2)}</pre> */}
+      <div>
+        <button onClick={onCreate}>Create</button>
+      </div>
+      <div>
+        <input value={joinLobbyId} onChange={e => setJoinLobbyId(e.target.value)} />
+        <button onClick={onJoin}>Join</button>
+      </div>
+      <div>
+        <button onClick={props.onExit}>Cancel</button>
+      </div>
     </div>
   )
 }
