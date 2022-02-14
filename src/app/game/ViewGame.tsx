@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Game, GameState, GridKey, OgreCard, OgreSquare } from '../../lib';
+import { Game, GameState, GridKey, OgreCard, OgreSquare, Player } from '../../lib';
 import { ViewBoard } from './ViewBoard';
 import { ViewHand } from './ViewHand';
 import './gameStyles.css';
@@ -18,6 +18,15 @@ export function ViewGame(props: {
     }
   }, [props.lobby, setState]);
 
+  const refreshState = (game: Game) => {
+    const newState = game.getState();
+    setSelectedHand(undefined);
+    setState(newState);
+    if (props.lobby) {
+      props.lobby.sendState(newState);
+    }
+  }
+
   const game = Game.loadFromState(state);
   const playCard = (args: {
     deploy: GridKey;
@@ -31,13 +40,12 @@ export function ViewGame(props: {
       deploy: args.deploy,
       attacks: args.attacks,
     });
-    const newState = game.getState();
-    setSelectedHand(undefined);
-    setState(newState);
-    if (props.lobby) {
-      props.lobby.sendState(newState);
-    }
+    refreshState(game);
   };
+  const onDraw = (player: Player) => {
+    player.drawForTurn();
+    refreshState(game);
+  }
 
   return (
     <div className='ViewColumns'>
@@ -45,6 +53,7 @@ export function ViewGame(props: {
         player={game.red}
         selected={selectedHand}
         setSelected={setSelectedHand}
+        draw={() => onDraw(game.red)}
       />
       <ViewBoard
         game={game}
@@ -55,6 +64,7 @@ export function ViewGame(props: {
         player={game.blue}
         selected={selectedHand}
         setSelected={setSelectedHand}
+        draw={() => onDraw(game.blue)}
       />
     </div>
   );

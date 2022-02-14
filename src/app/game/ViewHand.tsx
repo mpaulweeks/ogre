@@ -6,6 +6,7 @@ export function ViewHand(props: {
   player: Player;
   selected?: OgreCard;
   setSelected(card: OgreCard | undefined): void;
+  draw(): void;
 }) {
   const { team, hand, library } = props.player.getState();
   const libraryColor = ({
@@ -14,7 +15,11 @@ export function ViewHand(props: {
   })[team];
   return (
     <div className='ViewHand'>
-      <div className='ViewCard ViewCardLibrary' style={{ backgroundColor: libraryColor, borderColor: libraryColor, }}>
+      <div
+        className='ViewCard ViewCardLibrary'
+        style={{ backgroundColor: libraryColor, borderColor: libraryColor, }}
+        onClick={props.draw}
+      >
         {library.length} cards remaining
       </div>
       {hand.map(card => (
