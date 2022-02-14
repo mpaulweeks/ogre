@@ -24,7 +24,7 @@ export function ViewGame(props: {
     if (props.lobby && !localOnly) {
       props.lobby.sendState(newState);
     }
-  }, [props.lobby, setSelectedHand, setState, history]);
+  }, [props, history]);
 
   // define once, deps should never change
   useEffect(() => {
@@ -33,7 +33,7 @@ export function ViewGame(props: {
       // setting callback invokes once, ensuring both players get synced to lobby gameState
       props.lobby.setCallback(gs => refreshState(gs, true));
     }
-  }, [props.lobby, setState, refreshState]);
+  }, [props, refreshState]);
 
   // convenience vars
   const game = Game.loadFromState(state);

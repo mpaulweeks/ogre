@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './lobbyStyles.css';
 import { Lobby } from '../lobby';
 import { LobbyDisconnect } from '../appTypes';
@@ -19,7 +19,7 @@ export function ViewLobby(props: {
   const [createdLobbyId, setCreatedLobbyId] = useState('');
   const [disconnect, setDisconnect] = useState<LobbyDisconnect>(() => () => { });
 
-  const onCreate = async () => {
+  const onCreate = useCallback(async () => {
     setStatus(LobbyStatus.WaitingForNetwork);
     const conn = await Lobby.createLobby();
     setCreatedLobbyId(conn.lobby.id);
@@ -27,13 +27,15 @@ export function ViewLobby(props: {
     setStatus(LobbyStatus.WaitingForEnemy);
     await conn.matched;
     props.onMatch(conn.lobby);
-  };
-  const onCreateCancel = () => {
+  }, [props]);
+
+  const onCreateCancel = useCallback(() => {
     disconnect();
     setDisconnect(() => { });
     setStatus(LobbyStatus.Idle);
-  }
-  const onJoin = async () => {
+  }, [disconnect]);
+
+  const onJoin = useCallback(async () => {
     setStatus(LobbyStatus.WaitingForNetwork);
     const lobby = await Lobby.joinLobby(joinLobbyId);
     if (lobby) {
@@ -41,7 +43,7 @@ export function ViewLobby(props: {
     } else {
       setStatus(LobbyStatus.LobbyNotFound);
     }
-  }
+  }, [props, joinLobbyId]);
 
   if (status === LobbyStatus.WaitingForNetwork) {
     return (
