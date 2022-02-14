@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Board, Game, GridKey, OgreCard, OgreSquare, Unit } from '../../lib';
+import { Board, Game, GridKey, OgreCard, OgreSquare, Player, Unit } from '../../lib';
 import { ViewSquare } from './ViewSquare';
+
+interface Context {
+  readonly toPlay: OgreCard;
+  readonly unit: Unit;
+  readonly active: Player;
+  readonly enemy: Player;
+}
 
 export function ViewBoard(props: {
   game: Game;
@@ -18,41 +25,45 @@ export function ViewBoard(props: {
     setOgreAttack1(undefined);
   }, [props.toPlay]);
 
-  const activePlayer = props.toPlay && props.game.getPlayer(props.toPlay.team);
-  const enemyPlayer = props.toPlay && props.game.getEnemy(props.toPlay.team);
-  const isLightGev = props.toPlay?.unit === Unit.LightGev;
-  const isMissle = props.toPlay?.unit === Unit.CruiseMissile;
-  const isOgre = props.toPlay?.unit === Unit.Ogre;
+  const context: Context | undefined = props.toPlay ? {
+    toPlay: props.toPlay,
+    unit: props.toPlay.unit,
+    active: props.game.getPlayer(props.toPlay.team),
+    enemy: props.game.getEnemy(props.toPlay.team),
+  } : undefined;
+  const isLightGev = context?.unit === Unit.LightGev;
+  const isMissle = context?.unit === Unit.CruiseMissile;
+  const isOgre = context?.unit === Unit.Ogre;
 
   const board = new Board(props.game);
-  const tempSquare: OgreSquare | undefined = (props.toPlay && deploy) ? {
-    ...props.toPlay,
+  const tempSquare: OgreSquare | undefined = (context && deploy) ? {
+    ...context.toPlay,
     key: deploy,
   } : undefined;
   const gridSquares = board.getVisibleSquares(tempSquare);
 
   const enemySquares: Set<GridKey> = new Set(
-    enemyPlayer?.state.board.map(os => os.key) ?? []
+    context?.enemy.state.board.map(os => os.key) ?? []
   );
   const spotting: Set<GridKey> = new Set(
     isMissle
-      ? enemyPlayer?.state.board.map(os => os.key) ?? []
-      : activePlayer?.getSpotting() ?? []
+      ? context?.enemy.state.board.map(os => os.key) ?? []
+      : context?.active.getSpotting() ?? []
   );
   const supplied: Set<GridKey> = new Set([
-    ...activePlayer?.getSupplied(props.toPlay) ?? [],
+    ...context?.active.getSupplied(context.toPlay) ?? [],
     ...isLightGev ? board.getNeutralLightGevSquares(gridSquares) : [],
   ]);
   const possibleAttacks: Set<GridKey> = new Set(
-    isMissle
-      ? enemyPlayer?.state.board.map(os => os.key) ?? []
-      : (
-        (props.toPlay && activePlayer) && (
-          (deploy && activePlayer.getAttacking(props.toPlay, deploy)) ||
-          (hover && activePlayer.getAttacking(props.toPlay, hover)) ||
+    !context ? [] : (
+      isMissle
+        ? context.enemy.state.board.map(os => os.key) ?? []
+        : (
+          (deploy && context.active.getAttacking(context.toPlay, deploy)) ||
+          (hover && context.active.getAttacking(context.toPlay, hover)) ||
           []
         )
-      )
+    )
   );
   const allValidAttacks = new Set(
     Array.from(possibleAttacks)
@@ -63,7 +74,7 @@ export function ViewBoard(props: {
   const message = (
     (ogreAttack1 && 'Click second target to attack with your Ogre') ||
     (isOgre && 'Click first target to attack with your Ogre') ||
-    (!props.toPlay && 'Click a card in hand') ||
+    (!context && 'Click a card in hand') ||
     (isMissle && 'Click square to attack with your missle') ||
     (!deploy && 'Click square to deploy') ||
     'Click square to attack'
@@ -72,7 +83,7 @@ export function ViewBoard(props: {
   // todo convert to useCallback, break up and simplify somehow
   const onClick = () => {
     // handle bad states
-    if (!props.toPlay || !enemyPlayer) {
+    if (!context) {
       return;
     }
     if (!hover) {
@@ -80,7 +91,7 @@ export function ViewBoard(props: {
     }
     // handle missle
     if (isMissle) {
-      const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
+      const validAttack = allValidAttacks.has(hover) && context.enemy.getSquareFromBoard(hover);
       if (validAttack) {
         props.playCard({ deploy: hover, attacks: [validAttack], });
       }
@@ -99,7 +110,7 @@ export function ViewBoard(props: {
       return;
     }
     // handle 2nd click
-    const validAttack = allValidAttacks.has(hover) && enemyPlayer.getSquareFromBoard(hover);
+    const validAttack = allValidAttacks.has(hover) && context.enemy.getSquareFromBoard(hover);
     if (validAttack) {
       if (isOgre) {
         if (ogreAttack1) {
