@@ -1,10 +1,10 @@
-import dotenv from 'dotenv';
-import firebase from 'firebase/app';
+// import dotenv from 'dotenv';
+import { initializeApp } from 'firebase/app';
 import { Database, getDatabase, onValue, ref, set } from 'firebase/database';
 import { GameState } from '../lib';
 import { GameStateCallback, GameStateDisconnect, LobbyId } from './appTypes';
 
-dotenv.config();
+// dotenv.config();
 const config = {
   apiKey: process.env.REACT_APP_apiKey,
   authDomain: process.env.REACT_APP_authDomain,
@@ -19,9 +19,11 @@ const config = {
 class FirebaseSingleton {
   private db: Database;
   isOnline = true;
+  readonly _config = config;
 
   constructor() {
-    firebase.initializeApp(config);
+    console.log(config);
+    initializeApp(config);
     this.db = getDatabase();
   }
 
