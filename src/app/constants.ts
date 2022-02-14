@@ -1,6 +1,9 @@
 
 function checkFlag(flag: string) {
-  return window.location.search.includes(flag);
+  return (
+    window.location.hostname === 'localhost' &&
+    window.location.search.includes(flag)
+  );
 }
 
 export const CONSTANTS = {
