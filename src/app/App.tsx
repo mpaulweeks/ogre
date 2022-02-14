@@ -47,13 +47,13 @@ export function App() {
   // else
   return (
     <div className='ViewMenu'>
-      <div>
+      <div className='ViewMenuRow'>
         Welcome to Game. This is very WIP
       </div>
-      <div>
+      <div className='ViewMenuRow'>
         <button onClick={() => setView(AppView.Game)}>Play Offline</button>
       </div>
-      <div>
+      <div className='ViewMenuRow'>
         <button onClick={() => setView(AppView.Lobby)}>Play Online</button>
       </div>
     </div>

@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './app/App';
+import { ViewVersion } from './app/ViewVersion';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <ViewVersion />
   </React.StrictMode>,
   document.getElementById('root')
 );
