@@ -6,6 +6,8 @@ export function ViewBoard(props: {
   game: Game;
   toPlay?: OgreCard;
   playCard(args: { deploy: GridKey, attacks: OgreSquare[] }): void;
+  onUndo(): void;
+  onExit(): void;
 }) {
   const [hover, setHover] = useState<GridKey | undefined>();
   const [deploy, setDeploy] = useState<GridKey | undefined>();
@@ -147,6 +149,18 @@ export function ViewBoard(props: {
           ))}
         </div>
       ))}
+      <div
+        className='ViewCard ViewBoardUndo'
+        onClick={props.onUndo}
+      >
+        UNDO
+      </div>
+      <div
+        className='ViewCard ViewBoardExit'
+        onClick={props.onExit}
+      >
+        EXIT
+      </div>
     </div>
   )
 }

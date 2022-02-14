@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 export function ViewGame(props: {
   lobby?: Lobby; // todo
+  onExit(): void;
 }) {
   const [state, setState] = useState<GameState>(Game.create().getState());
   const [selectedHand, setSelectedHand] = useState<OgreCard | undefined>();
@@ -49,6 +50,9 @@ export function ViewGame(props: {
     player.drawForTurn();
     refreshState(game);
   }
+  const onUndo = () => {
+    // todo
+  }
 
   return (
     <div className='ViewColumns'>
@@ -63,6 +67,8 @@ export function ViewGame(props: {
         game={game}
         toPlay={selectedHand}
         playCard={playCard}
+        onUndo={onUndo}
+        onExit={props.onExit}
       />
       <ViewHand
         hide={hideP2}

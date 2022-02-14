@@ -7,32 +7,6 @@
   justify-content: center;
   align-items: stretch;
 }
-
-.ViewHand {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-
-  padding: 1em;
-  background-color: #eee;
-}
-
-.ViewBoard {
-  flex-grow: 1;
-}
-.ViewBoardTitle {
-  margin: 1em;
-  font-size: 2em;
-  text-align: center;
-}
-.ViewBoardRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
 .ViewCard {
   cursor: pointer;
   height: 5em;
@@ -47,12 +21,50 @@
   border-radius: 1em;
   margin: 0.2em;
 
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
+.ViewHand {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 1em;
+  background-color: #eee;
+}
+
+.ViewBoard {
+  position: relative;
+  flex-grow: 1;
+}
+.ViewBoardTitle {
+  margin: 1em;
+  font-size: 2em;
+  text-align: center;
+}
+.ViewBoardRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.ViewBoardUndo {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  border-color: lightgrey;
+}
+.ViewBoardExit {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  border-color: lightgrey;
+}
+
 .ViewCardLibrary {
   cursor: text;
   color: white;

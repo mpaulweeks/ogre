@@ -23,7 +23,10 @@ export function App() {
 
   if (view === AppView.Game) {
     return (
-      <ViewGame lobby={lobby} />
+      <ViewGame
+        lobby={lobby}
+        onExit={() => setView(AppView.Menu)}
+      />
     )
   }
 
