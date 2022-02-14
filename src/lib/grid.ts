@@ -42,7 +42,7 @@ const AttackRange: Record<Unit, RawOffset[]> = {
   [Unit.HeavyTank]: UpDownLeftRight,
   [Unit.Howitzer]: HowizterAttack,
   [Unit.LightGev]: UpDownLeftRight,
-  [Unit.CruiseMissile]: [], // todo
+  [Unit.CruiseMissile]: [], // cannot deploy. handled by FE
   [Unit.Ogre]: [
     ...AllAdjacent,
     { rx: 0, ry: -2 },
@@ -59,7 +59,7 @@ const SpottingRange: Record<Unit, RawOffset[]> = {
   [Unit.HeavyTank]: UpDownLeftRight,
   [Unit.Howitzer]: UpDownLeftRight,
   [Unit.LightGev]: UpDownLeftRight,
-  [Unit.CruiseMissile]: [], // todo
+  [Unit.CruiseMissile]: [], // cannot deploy. handled by FE
   [Unit.Ogre]: [
     ...AllAdjacent,
     { rx: -1, ry: 2 },
