@@ -1,5 +1,6 @@
 import { Game, GameState } from "../lib";
 import { GameStateCallback, GameStateDisconnect, LobbyId } from "./appTypes";
+import { CONSTANTS } from "./constants";
 import { FIREBASE } from "./firebase";
 
 export class Lobby {
@@ -27,9 +28,8 @@ export class Lobby {
   }
   static async createLobby() {
     const state = Game.create().state;
-    // const result = await FIREBASE.createLobby(state);
-    // temp to make testing easier
-    const result = await FIREBASE.createLobby(state, '123456');
+    const debugLobbyId = CONSTANTS.Debug.AutofillCode ? CONSTANTS.DefaultCode : undefined;
+    const result = await FIREBASE.createLobby(state, debugLobbyId);
     const lobby = new Lobby(true, result.lobbyId);
     console.log('lobby created!', lobby.id);
     return {

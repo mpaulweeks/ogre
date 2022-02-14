@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import './lobbyStyles.css';
 import { Lobby } from '../lobby';
 import { LobbyDisconnect } from '../appTypes';
+import { CONSTANTS } from '../constants';
 
 enum LobbyStatus {
   Idle,
@@ -15,7 +16,7 @@ export function ViewLobby(props: {
   onExit(): void;
 }) {
   const [status, setStatus] = useState<LobbyStatus>(LobbyStatus.Idle);
-  const [joinLobbyId, setJoinLobbyId] = useState('123456');
+  const [joinLobbyId, setJoinLobbyId] = useState(CONSTANTS.Debug.AutofillCode ? CONSTANTS.DefaultCode : '');
   const [createdLobbyId, setCreatedLobbyId] = useState('');
   const [disconnect, setDisconnect] = useState<LobbyDisconnect>(() => () => { });
 

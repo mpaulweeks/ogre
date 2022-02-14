@@ -3,6 +3,7 @@ import { ViewGame } from "./game/ViewGame";
 import { ViewLobby } from './lobby/ViewLobby';
 import './appStyles.css';
 import { Lobby } from './lobby';
+import { CONSTANTS } from './constants';
 
 enum AppView {
   Menu = 'Menu',
@@ -11,9 +12,9 @@ enum AppView {
 }
 
 const defaultView = (
-  (window.location.search.includes('menu') && AppView.Menu) ||
-  (window.location.search.includes('game') && AppView.Game) ||
-  (window.location.search.includes('lobby') && AppView.Lobby) ||
+  (CONSTANTS.Debug.JumpToMenu && AppView.Menu) ||
+  (CONSTANTS.Debug.JumpToGame && AppView.Game) ||
+  (CONSTANTS.Debug.JumpToLobby && AppView.Lobby) ||
   AppView.Menu
 );
 

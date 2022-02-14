@@ -5,8 +5,7 @@ import { ViewHand } from './ViewHand';
 import './gameStyles.css';
 import { Lobby } from '../lobby';
 import { useEffect } from 'react';
-
-const noHide = window.location.search.includes('nohide');
+import { CONSTANTS } from '../constants';
 
 export function ViewGame(props: {
   lobby?: Lobby;
@@ -37,8 +36,8 @@ export function ViewGame(props: {
 
   // convenience vars
   const game = Game.loadFromState(state);
-  const hideP1 = !noHide && !!props.lobby && !props.lobby.isHost;
-  const hideP2 = !noHide && !!props.lobby && props.lobby.isHost;
+  const hideP1 = !CONSTANTS.Debug.NoHide && !!props.lobby && !props.lobby.isHost;
+  const hideP2 = !CONSTANTS.Debug.NoHide && !!props.lobby && props.lobby.isHost;
 
   // redefine helper funcs everytime
   const playCard = (args: {
