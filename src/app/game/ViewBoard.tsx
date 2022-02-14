@@ -74,10 +74,10 @@ export function ViewBoard(props: {
   const message = (
     (ogreAttack1 && 'Click second target to attack with your Ogre') ||
     (isOgre && 'Click first target to attack with your Ogre') ||
-    (!context && 'Click a card in hand') ||
-    (isMissle && 'Click square to attack with your missle') ||
-    (!deploy && 'Click square to deploy') ||
-    'Click square to attack'
+    (!context && 'Click a card in your hand to start') ||
+    (isMissle && 'Click a purple square to attack with your missle') ||
+    (!deploy && 'Click a green square to deploy') ||
+    'Click a purple square to attack'
   );
 
   // todo convert to useCallback, break up and simplify somehow

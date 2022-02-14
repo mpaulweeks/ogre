@@ -34,7 +34,7 @@ export function ViewSquare(props: {
     ),
     borderColor: (
       (props.isHover && 'black') ||
-      (props.isAttacking && 'red') ||
+      (props.isAttacking && 'purple') ||
       (props.isSpotted && 'yellow') ||
       backgroundColor
     ),
