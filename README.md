@@ -1,9 +1,9 @@
-# ogre
+# ogre218
 
 Online game sim
 
 Resources:
-- [Play now](https://mpaulweeks.github.io/ogre/)
+- [Play now](https://mpaulweeks.github.io/ogre218/)
 - [Firebase console](https://console.firebase.google.com/u/0/project/ogre-sim/database/ogre-sim-default-rtdb/data)
 
 ## install
